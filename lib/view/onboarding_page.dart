@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:pocket_pal/intro_screens/intro_page_1.dart';
-import 'package:pocket_pal/intro_screens/intro_page_2.dart';
-import 'package:pocket_pal/intro_screens/intro_page_3.dart';
+import 'package:pocket_pal/onboarding_pages/onboarding_page_1.dart';
+import 'package:pocket_pal/onboarding_pages/onboarding_page_2.dart';
+import 'package:pocket_pal/onboarding_pages/onboarding_page_3.dart';
 import 'package:pocket_pal/view/home_page.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:pocket_pal/utils/colors.dart';
 
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({super.key});
@@ -56,7 +55,18 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 ),
 
                 // DOT INDICATOR
-                SmoothPageIndicator(controller: _controller, count: 3),
+                SmoothPageIndicator(
+                  controller: _controller,
+                  count: 3,
+                  effect: ExpandingDotsEffect(
+                    activeDotColor: Colors.blue,
+                    dotColor: Colors.grey,
+                    dotHeight: 10,
+                    dotWidth: 10,
+                    spacing: 10,
+                    expansionFactor: 3,
+                  ),
+                ),
 
                 // NEXT OR DONE
                 onLastPage
