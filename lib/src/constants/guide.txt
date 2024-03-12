@@ -1,0 +1,5 @@
+-- Contants --
+
+All the application level constants are defined in this directory 
+with-in their respective files. This directory contains the constants 
+for  `api endpoints`, `preferences` and analytics constants

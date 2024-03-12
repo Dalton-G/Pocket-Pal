@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pocket_pal/src/screens/universal/onboarding_pages/onboarding.dart';
-import 'package:pocket_pal/src/screens/patient/patient_home_page.dart';
-import 'package:pocket_pal/src/screens/patient/patient_schedule_page.dart';
+import 'package:pocket_pal/routes.dart';
+import 'package:pocket_pal/src/screens/universal/onboarding/onboarding.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,11 +13,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: OnboardingPage(),
-      routes: {
-        '/patient-homepage': (context) => PatientHomePage(),
-        '/patient-schedule': (context) => PatientSchedulePage(),
-      },
+      title: 'Pocket Pal',
+      home: const OnboardingPage(),
+      routes: Routes.routes,
     );
   }
 }

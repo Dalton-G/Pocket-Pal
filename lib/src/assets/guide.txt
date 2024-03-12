@@ -1,0 +1,6 @@
+-- assets --
+
+contains all media, seperated by format:
+- images/ include png, webp, jpeg, svg, etc
+- videos/ include mp4, gif, etc
+- others/ anything else

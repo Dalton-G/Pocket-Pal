@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:pocket_pal/src/screens/universal/onboarding_pages/onboarding_page_1.dart';
-import 'package:pocket_pal/src/screens/universal/onboarding_pages/onboarding_page_2.dart';
-import 'package:pocket_pal/src/screens/universal/onboarding_pages/onboarding_page_3.dart';
+import 'package:pocket_pal/src/screens/universal/onboarding/pages/intro_page_1.dart';
+import 'package:pocket_pal/src/screens/universal/onboarding/pages/intro_page_2.dart';
+import 'package:pocket_pal/src/screens/universal/onboarding/pages/intro_page_3.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class OnboardingPage extends StatefulWidget {
@@ -13,7 +13,7 @@ class OnboardingPage extends StatefulWidget {
 
 class _OnboardingPageState extends State<OnboardingPage> {
   // CONTROLLER
-  PageController _controller = PageController();
+  final PageController _controller = PageController();
 
   // ON LAST PAGE
   bool onLastPage = false;
@@ -41,7 +41,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
           // SMOOTH PAGE INDICATOR
           Container(
-            alignment: Alignment(0, 0.85),
+            alignment: const Alignment(0, 0.85),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -50,7 +50,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   onTap: () {
                     _controller.jumpToPage(2);
                   },
-                  child: Text(
+                  child: const Text(
                     'Skip',
                     style: TextStyle(
                       fontFamily: 'Nunito',
@@ -64,7 +64,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 SmoothPageIndicator(
                   controller: _controller,
                   count: 3,
-                  effect: ExpandingDotsEffect(
+                  effect: const ExpandingDotsEffect(
                     activeDotColor: Colors.blue,
                     dotColor: Colors.grey,
                     dotHeight: 10,
@@ -80,7 +80,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                         onTap: () {
                           Navigator.pushNamed(context, '/patient-homepage');
                         },
-                        child: Text(
+                        child: const Text(
                           'Done',
                           style: TextStyle(
                             fontFamily: 'Nunito',
@@ -92,11 +92,11 @@ class _OnboardingPageState extends State<OnboardingPage> {
                     : GestureDetector(
                         onTap: () {
                           _controller.nextPage(
-                            duration: Duration(milliseconds: 500),
+                            duration: const Duration(milliseconds: 500),
                             curve: Curves.easeIn,
                           );
                         },
-                        child: Text(
+                        child: const Text(
                           'Next',
                           style: TextStyle(
                             fontFamily: 'Nunito',

@@ -1,0 +1,4 @@
+-- utils --
+
+Contains the utilities/common functions of your application. 
+For example, Showing dates format, Currency in proper format, Network check etc..
