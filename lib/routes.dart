@@ -8,8 +8,8 @@ class Routes {
   // static variables
   static const String onboarding = '/onboarding';
 
-  static const String patientHome = '/patient-homepage';
-  static const String patientSchedule = '/patient-schedule';
+  static const String patientHome = '/patient-home-page';
+  static const String patientSchedule = '/patient-schedule-page';
 
   // routes
   static final dynamic routes = <String, WidgetBuilder>{

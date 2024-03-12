@@ -78,7 +78,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 onLastPage
                     ? GestureDetector(
                         onTap: () {
-                          Navigator.pushNamed(context, '/patient-homepage');
+                          Navigator.pushNamed(context, '/patient-home-page');
                         },
                         child: const Text(
                           'Done',
