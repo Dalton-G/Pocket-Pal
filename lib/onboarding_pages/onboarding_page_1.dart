@@ -15,8 +15,8 @@ class IntroPage1 extends StatelessWidget {
             // Thumbnail
             Center(
               child: Container(
-                height: 350,
-                width: 350,
+                height: 300,
+                width: 300,
                 child: Image.asset('lib/images/onboarding_1.png'),
               ),
             ),
@@ -28,7 +28,7 @@ class IntroPage1 extends StatelessWidget {
                 'Therapy made easy and accessible',
                 style: TextStyle(
                   fontFamily: 'Overpass',
-                  fontSize: 40,
+                  fontSize: 30,
                   fontWeight: FontWeight.bold,
                   height: 1.2,
                 ),
@@ -43,11 +43,11 @@ class IntroPage1 extends StatelessWidget {
                 "Pocket Pal brings therapy to your fingertips by connecting you with world-class counsellors and therapists.",
                 style: TextStyle(
                   fontFamily: 'Nunito',
-                  fontSize: 20,
+                  fontSize: 18,
                   fontWeight: FontWeight.bold,
                   height: 1.5,
                 ),
-                textAlign: TextAlign.justify,
+                textAlign: TextAlign.left,
               ),
             ),
           ],

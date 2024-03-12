@@ -5,7 +5,7 @@ class IntroPage2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: secondaryBlue,
+      color: secondaryOrange,
       child: Center(
         child: Text('Page 2'),
       ),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pocket_pal/view/onboarding_page.dart';
+import 'package:pocket_pal/onboarding_pages/onboarding.dart';
 
 void main() {
   runApp(const MyApp());

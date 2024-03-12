@@ -42,7 +42,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
           // SMOOTH PAGE INDICATOR
           Container(
-            alignment: Alignment(0, 0.75),
+            alignment: Alignment(0, 0.85),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -51,7 +51,14 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   onTap: () {
                     _controller.jumpToPage(2);
                   },
-                  child: Text('Skip'),
+                  child: Text(
+                    'Skip',
+                    style: TextStyle(
+                      fontFamily: 'Nunito',
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                 ),
 
                 // DOT INDICATOR
@@ -81,7 +88,14 @@ class _OnboardingPageState extends State<OnboardingPage> {
                             ),
                           );
                         },
-                        child: Text('Done'),
+                        child: Text(
+                          'Done',
+                          style: TextStyle(
+                            fontFamily: 'Nunito',
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                       )
                     : GestureDetector(
                         onTap: () {
@@ -90,7 +104,14 @@ class _OnboardingPageState extends State<OnboardingPage> {
                             curve: Curves.easeIn,
                           );
                         },
-                        child: Text('Next'),
+                        child: Text(
+                          'Next',
+                          style: TextStyle(
+                            fontFamily: 'Nunito',
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                       ),
               ],
             ),
