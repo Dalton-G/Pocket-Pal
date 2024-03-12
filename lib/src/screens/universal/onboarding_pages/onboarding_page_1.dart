@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pocket_pal/utils/colors.dart';
+import 'package:pocket_pal/theme/colors/colors.dart';
 
 class IntroPage1 extends StatelessWidget {
   @override
@@ -10,14 +10,14 @@ class IntroPage1 extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            SizedBox(height: 60),
+            const SizedBox(height: 60),
 
             // Thumbnail
             Center(
               child: Container(
                 height: 300,
                 width: 300,
-                child: Image.asset('lib/images/onboarding_1.png'),
+                child: Image.asset('lib/src/assets/images/onboarding_1.png'),
               ),
             ),
 

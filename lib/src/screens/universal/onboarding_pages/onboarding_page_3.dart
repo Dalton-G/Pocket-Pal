@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pocket_pal/utils/colors.dart';
+import 'package:pocket_pal/theme/colors/colors.dart';
 
 class IntroPage3 extends StatelessWidget {
   @override

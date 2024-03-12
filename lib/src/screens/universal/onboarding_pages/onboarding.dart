@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:pocket_pal/onboarding_pages/onboarding_page_1.dart';
-import 'package:pocket_pal/onboarding_pages/onboarding_page_2.dart';
-import 'package:pocket_pal/onboarding_pages/onboarding_page_3.dart';
-import 'package:pocket_pal/view/home_page.dart';
+import 'package:pocket_pal/src/screens/universal/onboarding_pages/onboarding_page_1.dart';
+import 'package:pocket_pal/src/screens/universal/onboarding_pages/onboarding_page_2.dart';
+import 'package:pocket_pal/src/screens/universal/onboarding_pages/onboarding_page_3.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class OnboardingPage extends StatefulWidget {
@@ -79,14 +78,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 onLastPage
                     ? GestureDetector(
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return HomePage();
-                              },
-                            ),
-                          );
+                          Navigator.pushNamed(context, '/patient-homepage');
                         },
                         child: Text(
                           'Done',
