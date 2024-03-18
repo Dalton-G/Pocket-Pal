@@ -66,7 +66,8 @@ class OnboardingPage extends StatelessWidget {
                 GestureDetector(
                   onTap: () {
                     if (provider.currentPageIndex == 2) {
-                      Navigator.pushNamed(context, '/patient-home-page');
+                      Navigator.pushReplacementNamed(
+                          context, '/member-navigator');
                     } else {
                       provider
                           .setCurrentPageIndex(provider.currentPageIndex + 1);
