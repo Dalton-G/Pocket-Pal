@@ -5,10 +5,12 @@ import 'package:pocket_pal/theme/colors/colors.dart';
 class GNavBarEnhanced extends StatelessWidget {
   final List<GButton> tabs;
   final Function(int)? onTabChange;
+  final int? selectedIndex;
 
   const GNavBarEnhanced({
     Key? key,
     required this.tabs,
+    required this.selectedIndex,
     this.onTabChange,
   }) : super(key: key);
 
@@ -24,6 +26,7 @@ class GNavBarEnhanced extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
           child: GNav(
+            selectedIndex: selectedIndex!,
             color: Colors.grey,
             activeColor: Colors.white,
             backgroundColor: Colors.white,

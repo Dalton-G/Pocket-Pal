@@ -13,7 +13,7 @@ class MemberChatPage extends StatelessWidget {
       appBar: AppBar(
         foregroundColor: Colors.white,
         title: const Text(
-          'Schedule Page',
+          'Chat Page',
           style: TextStyle(
             fontFamily: 'Overpass',
             fontWeight: FontWeight.bold,

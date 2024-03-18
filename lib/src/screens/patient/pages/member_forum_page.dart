@@ -13,7 +13,7 @@ class MemberForumPage extends StatelessWidget {
       appBar: AppBar(
         foregroundColor: Colors.white,
         title: const Text(
-          'Schedule Page',
+          'Forum Page',
           style: TextStyle(
             fontFamily: 'Overpass',
             fontWeight: FontWeight.bold,

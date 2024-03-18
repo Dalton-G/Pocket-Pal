@@ -36,7 +36,7 @@ class MemberNavigator extends StatelessWidget {
           ),
         ],
       ),
-      bottomNavigationBar: const GNavBarEnhanced(
+      bottomNavigationBar: GNavBarEnhanced(
         tabs: [
           GButton(
             icon: Icons.home,
@@ -46,6 +46,14 @@ class MemberNavigator extends StatelessWidget {
               fontFamily: 'Nunito',
               fontWeight: FontWeight.bold,
             ),
+            onPressed: () {
+              provider.setSelectedIndex(0);
+              pageController.animateToPage(
+                0,
+                duration: const Duration(milliseconds: 500),
+                curve: Curves.easeInOut,
+              );
+            },
           ),
           GButton(
             icon: Icons.calendar_month,
@@ -55,6 +63,14 @@ class MemberNavigator extends StatelessWidget {
               fontFamily: 'Nunito',
               fontWeight: FontWeight.bold,
             ),
+            onPressed: () {
+              provider.setSelectedIndex(1);
+              pageController.animateToPage(
+                1,
+                duration: const Duration(milliseconds: 500),
+                curve: Curves.easeInOut,
+              );
+            },
           ),
           GButton(
             icon: Icons.forum,
@@ -64,17 +80,34 @@ class MemberNavigator extends StatelessWidget {
               fontFamily: 'Nunito',
               fontWeight: FontWeight.bold,
             ),
+            onPressed: () {
+              provider.setSelectedIndex(2);
+              pageController.animateToPage(
+                2,
+                duration: const Duration(milliseconds: 500),
+                curve: Curves.easeInOut,
+              );
+            },
           ),
           GButton(
             icon: Icons.post_add,
-            text: 'Confess',
+            text: 'Forum',
             textStyle: TextStyle(
               color: Colors.white,
               fontFamily: 'Nunito',
               fontWeight: FontWeight.bold,
             ),
+            onPressed: () {
+              provider.setSelectedIndex(3);
+              pageController.animateToPage(
+                3,
+                duration: const Duration(milliseconds: 500),
+                curve: Curves.easeInOut,
+              );
+            },
           ),
         ],
+        selectedIndex: provider.selectedIndex,
       ),
     );
   }
