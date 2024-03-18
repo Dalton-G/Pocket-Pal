@@ -45,7 +45,9 @@ class MemberNavigator extends StatelessWidget {
             child: GNavBarEnhanced(
               tabs: [
                 GButton(
-                  icon: Icons.home,
+                  icon: provider.selectedIndex == 0
+                      ? Icons.home
+                      : Icons.home_outlined,
                   text: 'Home',
                   textStyle: const TextStyle(
                     color: Colors.white,
@@ -58,7 +60,9 @@ class MemberNavigator extends StatelessWidget {
                   },
                 ),
                 GButton(
-                  icon: Icons.calendar_month,
+                  icon: provider.selectedIndex == 1
+                      ? Icons.calendar_month
+                      : Icons.calendar_month_outlined,
                   text: 'Schedule',
                   textStyle: const TextStyle(
                     color: Colors.white,
@@ -71,7 +75,9 @@ class MemberNavigator extends StatelessWidget {
                   },
                 ),
                 GButton(
-                  icon: Icons.forum,
+                  icon: provider.selectedIndex == 2
+                      ? Icons.forum
+                      : Icons.forum_outlined,
                   text: 'Chat',
                   textStyle: const TextStyle(
                     color: Colors.white,
@@ -84,7 +90,9 @@ class MemberNavigator extends StatelessWidget {
                   },
                 ),
                 GButton(
-                  icon: Icons.post_add,
+                  icon: provider.selectedIndex == 3
+                      ? Icons.group
+                      : Icons.group_outlined,
                   text: 'Forum',
                   textStyle: const TextStyle(
                     color: Colors.white,
