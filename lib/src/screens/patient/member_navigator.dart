@@ -1,35 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:pocket_pal/src/providers/member_navbar_selection_provider.dart';
+import 'package:pocket_pal/src/screens/patient/pages/member_chat_page.dart';
+import 'package:pocket_pal/src/screens/patient/pages/member_forum_page.dart';
+import 'package:pocket_pal/src/screens/patient/pages/member_home_page.dart';
+import 'package:pocket_pal/src/screens/patient/pages/member_schedule_page.dart';
 import 'package:pocket_pal/src/widgets/navbar/g_navbar_enhanced.dart';
-import 'package:pocket_pal/theme/colors/colors.dart';
+import 'package:provider/provider.dart';
 
-class PatientSchedulePage extends StatelessWidget {
-  const PatientSchedulePage({Key? key});
+class MemberNavigator extends StatelessWidget {
+  const MemberNavigator({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<MemberNavBarSelectionProvider>(context);
+
+    final PageController pageController =
+        PageController(initialPage: provider.selectedIndex);
+
     return Scaffold(
-      backgroundColor: Colors.grey[300],
-
-      // APP BAR
-      appBar: AppBar(
-        foregroundColor: Colors.white,
-        title: const Text(
-          'Home Page',
-          style: TextStyle(
-            fontFamily: 'Overpass',
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
+      backgroundColor: Colors.white,
+      body: Stack(
+        children: [
+          PageView(
+            controller: pageController,
+            onPageChanged: (index) {
+              provider.setSelectedIndex(index);
+            },
+            children: [
+              MemberHomePage(),
+              MemberSchedulePage(),
+              MemberChatPage(),
+              MemberForumPage(),
+            ],
           ),
-        ),
-        backgroundColor: primaryGreen,
+        ],
       ),
-
-      // BODY
-
-      // BOTTOM NAVIGATION BAR
-      bottomNavigationBar: GNavBarEnhanced(
-        tabs: const [
+      bottomNavigationBar: const GNavBarEnhanced(
+        tabs: [
           GButton(
             icon: Icons.home,
             text: 'Home',
