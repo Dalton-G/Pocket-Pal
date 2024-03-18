@@ -27,87 +27,80 @@ class MemberNavigator extends StatelessWidget {
             onPageChanged: (index) {
               provider.setSelectedIndex(index);
             },
-            children: [
+            children: const [
               MemberHomePage(),
               MemberSchedulePage(),
               MemberChatPage(),
               MemberForumPage(),
             ],
           ),
-        ],
-      ),
-      bottomNavigationBar: GNavBarEnhanced(
-        tabs: [
-          GButton(
-            icon: Icons.home,
-            text: 'Home',
-            textStyle: TextStyle(
-              color: Colors.white,
-              fontFamily: 'Nunito',
-              fontWeight: FontWeight.bold,
+
+          // Bottom Nav Bar (for dev's reference)
+          // Not using 'bottomNavigationBar' property of Scaffold
+          // because it does not allow styling the bottom nav bar
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: GNavBarEnhanced(
+              tabs: [
+                GButton(
+                  icon: Icons.home,
+                  text: 'Home',
+                  textStyle: const TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'Nunito',
+                    fontWeight: FontWeight.bold,
+                  ),
+                  onPressed: () {
+                    provider.setSelectedIndex(0);
+                    pageController.jumpToPage(0);
+                  },
+                ),
+                GButton(
+                  icon: Icons.calendar_month,
+                  text: 'Schedule',
+                  textStyle: const TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'Nunito',
+                    fontWeight: FontWeight.bold,
+                  ),
+                  onPressed: () {
+                    provider.setSelectedIndex(1);
+                    pageController.jumpToPage(1);
+                  },
+                ),
+                GButton(
+                  icon: Icons.forum,
+                  text: 'Chat',
+                  textStyle: const TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'Nunito',
+                    fontWeight: FontWeight.bold,
+                  ),
+                  onPressed: () {
+                    provider.setSelectedIndex(2);
+                    pageController.jumpToPage(2);
+                  },
+                ),
+                GButton(
+                  icon: Icons.post_add,
+                  text: 'Forum',
+                  textStyle: const TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'Nunito',
+                    fontWeight: FontWeight.bold,
+                  ),
+                  onPressed: () {
+                    provider.setSelectedIndex(3);
+                    pageController.jumpToPage(3);
+                  },
+                ),
+              ],
+              selectedIndex: provider.selectedIndex,
             ),
-            onPressed: () {
-              provider.setSelectedIndex(0);
-              pageController.animateToPage(
-                0,
-                duration: const Duration(milliseconds: 500),
-                curve: Curves.easeInOut,
-              );
-            },
-          ),
-          GButton(
-            icon: Icons.calendar_month,
-            text: 'Schedule',
-            textStyle: TextStyle(
-              color: Colors.white,
-              fontFamily: 'Nunito',
-              fontWeight: FontWeight.bold,
-            ),
-            onPressed: () {
-              provider.setSelectedIndex(1);
-              pageController.animateToPage(
-                1,
-                duration: const Duration(milliseconds: 500),
-                curve: Curves.easeInOut,
-              );
-            },
-          ),
-          GButton(
-            icon: Icons.forum,
-            text: 'Chat',
-            textStyle: TextStyle(
-              color: Colors.white,
-              fontFamily: 'Nunito',
-              fontWeight: FontWeight.bold,
-            ),
-            onPressed: () {
-              provider.setSelectedIndex(2);
-              pageController.animateToPage(
-                2,
-                duration: const Duration(milliseconds: 500),
-                curve: Curves.easeInOut,
-              );
-            },
-          ),
-          GButton(
-            icon: Icons.post_add,
-            text: 'Forum',
-            textStyle: TextStyle(
-              color: Colors.white,
-              fontFamily: 'Nunito',
-              fontWeight: FontWeight.bold,
-            ),
-            onPressed: () {
-              provider.setSelectedIndex(3);
-              pageController.animateToPage(
-                3,
-                duration: const Duration(milliseconds: 500),
-                curve: Curves.easeInOut,
-              );
-            },
           ),
         ],
-        selectedIndex: provider.selectedIndex,
       ),
     );
   }
