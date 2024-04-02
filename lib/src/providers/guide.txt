@@ -1,4 +1,0 @@
--- providers --
-
-Contains store(s) for state-management of your application, 
-to connect the reactive data of your application with the UI. 

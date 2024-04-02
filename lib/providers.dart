@@ -1,3 +1,4 @@
+import 'package:pocket_pal/src/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:pocket_pal/src/providers/onboarding_page_provider.dart';
 import 'package:pocket_pal/src/providers/member_navbar_selection_provider.dart';
@@ -9,6 +10,10 @@ class Providers {
       create: (_) => MemberNavBarSelectionProvider(),
     ),
     ChangeNotifierProvider<OnboardingPageProvider>(
-        create: (_) => OnboardingPageProvider()),
+      create: (_) => OnboardingPageProvider(),
+    ),
+    ChangeNotifierProvider<UserProvider>(
+      create: (_) => UserProvider(),
+    ),
   ].toList();
 }
