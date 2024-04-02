@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pocket_pal/theme/app_theme.dart';
 import 'package:provider/provider.dart';
 import 'package:pocket_pal/routes.dart';
 import 'package:pocket_pal/src/screens/universal/onboarding/onboarding.dart';
@@ -18,6 +19,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Pocket Pal',
+        theme: AppTheme.lightTheme,
         home: const OnboardingPage(),
         routes: Routes.routes,
       ),

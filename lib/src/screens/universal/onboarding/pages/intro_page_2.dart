@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:pocket_pal/theme/colors/colors.dart';
 
 class IntroPage2 extends StatelessWidget {
+  const IntroPage2({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: secondaryOrange,
-      child: Center(
-        child: Text('Page 2'),
-      ),
+    return const Center(
+      child: Text('Page 2'),
     );
   }
 }
