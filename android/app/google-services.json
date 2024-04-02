@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "345088221010",
+    "project_id": "pocketpal-ebd3b",
+    "storage_bucket": "pocketpal-ebd3b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:345088221010:android:73197f407e89445d07e48b",
+        "android_client_info": {
+          "package_name": "com.example.pocket_pal"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBuIH8RBkD3eIIqOnlVhJKWzWl1B1woBQo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

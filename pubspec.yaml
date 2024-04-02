@@ -42,6 +42,12 @@ dependencies:
   zego_zimkit: ^1.17.0
   zego_uikit_prebuilt_call: ^4.4.3
   zego_uikit_signaling_plugin: ^2.7.6
+  cloud_firestore: ^4.15.9
+  firebase_core: ^2.27.1
+  firebase_auth: ^4.18.0
+  uuid: ^4.3.3
+  image_picker: ^1.0.7
+  firebase_storage: ^11.6.11
 
 dev_dependencies:
   flutter_test:
