@@ -26,7 +26,7 @@ class OnboardingPage extends StatelessWidget {
             onPageChanged: (index) {
               provider.setCurrentPageIndex(index);
             },
-            children: [
+            children: const [
               IntroPage1(),
               IntroPage2(),
               IntroPage3(),
