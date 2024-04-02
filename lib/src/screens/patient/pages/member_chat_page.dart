@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:pocket_pal/theme/colors/colors.dart';
 
 class MemberChatPage extends StatelessWidget {
-  const MemberChatPage({Key? key});
+  const MemberChatPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,13 +13,7 @@ class MemberChatPage extends StatelessWidget {
         foregroundColor: Colors.white,
         title: const Text(
           'Chat Page',
-          style: TextStyle(
-            fontFamily: 'Overpass',
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
         ),
-        backgroundColor: primaryGreen,
       ),
 
       // BODY
