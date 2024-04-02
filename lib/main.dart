@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pocket_pal/src/constants/secrets.dart';
 import 'package:pocket_pal/theme/app_theme.dart';
 import 'package:provider/provider.dart';
 import 'package:pocket_pal/routes.dart';
@@ -12,9 +13,8 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() {
   ZIMKit().init(
-    appID: 303929327,
-    appSign:
-        "c66bfd5a6cc72b673497f8429a1ec0faaca26c9489571dafe8af3b8bfb1f811f", // your appSign
+    appID: zegoAppId,
+    appSign: zegoAppSign,
   );
   WidgetsFlutterBinding.ensureInitialized();
   ZegoUIKitPrebuiltCallInvitationService().setNavigatorKey(navigatorKey);

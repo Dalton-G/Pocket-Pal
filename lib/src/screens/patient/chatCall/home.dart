@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pocket_pal/src/constants/secrets.dart';
 import 'package:pocket_pal/src/screens/patient/chatCall/chat_list.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
@@ -24,10 +25,8 @@ class Home extends StatelessWidget {
           ),
         ),
         // appID: 382666142
-        appID: 303929327,
-        appSign:
-            // "66eb567f04dd67480c87f3967bdd971f96308e62ce70a14e3e3971674fd7a89e",
-            "c66bfd5a6cc72b673497f8429a1ec0faaca26c9489571dafe8af3b8bfb1f811f",
+        appID: zegoAppId,
+        appSign: zegoAppSign,
         userID: userID.text,
         userName: userName.text,
         plugins: [ZegoUIKitSignalingPlugin()],
