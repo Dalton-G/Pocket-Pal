@@ -1,36 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:pocket_pal/src/screens/universal/onboarding/pages/intro_page_1.dart';
 import 'package:pocket_pal/src/screens/universal/onboarding/pages/intro_page_2.dart';
 import 'package:pocket_pal/src/screens/universal/onboarding/pages/intro_page_3.dart';
+import 'package:pocket_pal/src/providers/onboarding_page_provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-class OnboardingPage extends StatefulWidget {
+class OnboardingPage extends StatelessWidget {
   const OnboardingPage({super.key});
 
   @override
-  State<OnboardingPage> createState() => _OnboardingPageState();
-}
-
-class _OnboardingPageState extends State<OnboardingPage> {
-  // CONTROLLER
-  final PageController _controller = PageController();
-
-  // ON LAST PAGE
-  bool onLastPage = false;
-
-  @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<OnboardingPageProvider>(context);
+
+    // Create a PageController instance
+    final PageController pageController =
+        PageController(initialPage: provider.currentPageIndex);
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Stack(
         children: [
-          // PAGE VIEW
           PageView(
-            controller: _controller,
+            controller: pageController, // Pass the PageController to PageView
             onPageChanged: (index) {
-              setState(() {
-                onLastPage = (index == 2);
-              });
+              provider.setCurrentPageIndex(index);
             },
             children: [
               IntroPage1(),
@@ -38,17 +32,14 @@ class _OnboardingPageState extends State<OnboardingPage> {
               IntroPage3(),
             ],
           ),
-
-          // SMOOTH PAGE INDICATOR
           Container(
             alignment: const Alignment(0, 0.85),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                // SKIP BUTTON
                 GestureDetector(
                   onTap: () {
-                    _controller.jumpToPage(2);
+                    provider.setCurrentPageIndex(2);
                   },
                   child: const Text(
                     'Skip',
@@ -59,10 +50,9 @@ class _OnboardingPageState extends State<OnboardingPage> {
                     ),
                   ),
                 ),
-
-                // DOT INDICATOR
                 SmoothPageIndicator(
-                  controller: _controller,
+                  controller:
+                      pageController, // Pass the PageController to SmoothPageIndicator
                   count: 3,
                   effect: const ExpandingDotsEffect(
                     activeDotColor: Colors.blue,
@@ -73,38 +63,30 @@ class _OnboardingPageState extends State<OnboardingPage> {
                     expansionFactor: 3,
                   ),
                 ),
-
-                // NEXT OR DONE
-                onLastPage
-                    ? GestureDetector(
-                        onTap: () {
-                          Navigator.pushNamed(context, '/patient-home-page');
-                        },
-                        child: const Text(
-                          'Done',
-                          style: TextStyle(
-                            fontFamily: 'Nunito',
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      )
-                    : GestureDetector(
-                        onTap: () {
-                          _controller.nextPage(
-                            duration: const Duration(milliseconds: 500),
-                            curve: Curves.easeIn,
-                          );
-                        },
-                        child: const Text(
-                          'Next',
-                          style: TextStyle(
-                            fontFamily: 'Nunito',
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
+                GestureDetector(
+                  onTap: () {
+                    if (provider.currentPageIndex == 2) {
+                      Navigator.pushReplacementNamed(
+                          context, '/member-navigator');
+                    } else {
+                      provider
+                          .setCurrentPageIndex(provider.currentPageIndex + 1);
+                      pageController.animateToPage(
+                        provider.currentPageIndex,
+                        duration: const Duration(milliseconds: 500),
+                        curve: Curves.easeInOut,
+                      );
+                    }
+                  },
+                  child: Text(
+                    provider.currentPageIndex == 2 ? 'Done' : 'Next',
+                    style: const TextStyle(
+                      fontFamily: 'Nunito',
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
               ],
             ),
           ),

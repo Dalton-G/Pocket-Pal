@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pocket_pal/src/screens/patient/chatCall/login.dart';
+import 'package:pocket_pal/theme/app_theme.dart';
 import 'package:provider/provider.dart';
 import 'package:pocket_pal/routes.dart';
 import 'package:pocket_pal/src/screens/universal/onboarding/onboarding.dart';
@@ -14,7 +15,7 @@ void main() {
   ZIMKit().init(
     appID: 303929327,
     appSign:
-    "c66bfd5a6cc72b673497f8429a1ec0faaca26c9489571dafe8af3b8bfb1f811f", // your appSign
+        "c66bfd5a6cc72b673497f8429a1ec0faaca26c9489571dafe8af3b8bfb1f811f", // your appSign
   );
   WidgetsFlutterBinding.ensureInitialized();
   ZegoUIKitPrebuiltCallInvitationService().setNavigatorKey(navigatorKey);
@@ -26,7 +27,6 @@ void main() {
     runApp(MyApp(navigatorKey: navigatorKey));
   });
 }
-
 
 class MyApp extends StatelessWidget {
   final GlobalKey<NavigatorState> navigatorKey;
@@ -41,6 +41,7 @@ class MyApp extends StatelessWidget {
         navigatorKey: navigatorKey,
         debugShowCheckedModeBanner: false,
         title: 'Pocket Pal',
+        theme: AppTheme.lightTheme,
         home: const OnboardingPage(),
         routes: Routes.routes,
       ),

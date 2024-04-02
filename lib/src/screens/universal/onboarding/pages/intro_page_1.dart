@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:pocket_pal/theme/colors/colors.dart';
 
 class IntroPage1 extends StatelessWidget {
+  const IntroPage1({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: secondaryBlue,
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -14,7 +14,7 @@ class IntroPage1 extends StatelessWidget {
 
             // Thumbnail
             Center(
-              child: Container(
+              child: SizedBox(
                 height: 300,
                 width: 300,
                 child: Image.asset('lib/src/assets/images/onboarding_1.png'),
@@ -22,7 +22,7 @@ class IntroPage1 extends StatelessWidget {
             ),
 
             // Title
-            Padding(
+            const Padding(
               padding: EdgeInsets.fromLTRB(40, 50, 40, 0),
               child: Text(
                 'Therapy made easy and accessible',
@@ -37,7 +37,7 @@ class IntroPage1 extends StatelessWidget {
             ),
 
             // Description
-            Padding(
+            const Padding(
               padding: EdgeInsets.fromLTRB(40, 10, 40, 0),
               child: Text(
                 "Pocket Pal brings therapy to your fingertips by connecting you with world-class counsellors and therapists.",
