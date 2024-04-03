@@ -1,7 +1,8 @@
-// ignore_for_file: use_build_context_synchronously, avoid_print
+// ignore_for_file: use_build_context_synchronously
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:pocket_pal/src/providers/user_provider.dart';
+import 'package:provider/provider.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({super.key});
@@ -13,31 +14,6 @@ class ForgotPasswordPage extends StatefulWidget {
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   // 输入框
   final _emailController = TextEditingController();
-
-  // 发送密码重置电子邮件
-  Future passwordReset() async {
-    try {
-      await FirebaseAuth.instance.sendPasswordResetEmail(
-        email: _emailController.text.trim(),
-      );
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text('Password Reset Email Sent'),
-          content:
-              const Text('Please check your email to reset your password.'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('OK'),
-            ),
-          ],
-        ),
-      );
-    } on FirebaseAuthException catch (e) {
-      print(e.message);
-    }
-  }
 
   // 收拾输入框
   @override
@@ -109,7 +85,16 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
           // 按钮
           MaterialButton(
-            onPressed: passwordReset,
+            onPressed: () async {
+              await context
+                  .read<UserProvider>()
+                  .resetPassword(_emailController.text.trim());
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                    content: Text('✅ Reset password email has been sent')),
+              );
+              Navigator.pop(context);
+            },
             color: Colors.blue,
             child: const Text(
               'Reset Password',
