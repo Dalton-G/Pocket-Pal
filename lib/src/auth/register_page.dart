@@ -20,7 +20,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final _nameController = TextEditingController();
 
   // 角色
-  final List<String> _roleOptions = ['member', 'admin'];
+  final List<String> _roleOptions = ['member', 'admin', 'therapist'];
   String _selectedRole = 'member'; // 原本 default
 
   // 登录按钮技术

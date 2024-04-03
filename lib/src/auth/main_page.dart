@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pocket_pal/src/auth/auth_page.dart';
 import 'package:pocket_pal/src/screens/admin/pages/admin_home_page.dart';
-import 'package:pocket_pal/src/screens/patient/pages/member_home_page.dart';
+import 'package:pocket_pal/src/screens/patient/member_navigator.dart';
 import 'package:pocket_pal/src/screens/therapist/pages/therapist_home_page.dart';
 
 class MainPage extends StatelessWidget {
@@ -36,7 +36,7 @@ class MainPage extends StatelessWidget {
                   final data = snapshot.data!.data() as Map<String, dynamic>;
                   final String role = data['role'];
                   if (role == 'member') {
-                    return const MemberHomePage();
+                    return const MemberNavigator();
                   } else if (role == 'admin') {
                     return const AdminHomePage();
                   } else if (role == 'therapist') {
