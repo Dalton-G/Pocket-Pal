@@ -1,6 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:pocket_pal/src/auth/forgot_password.dart';
+import 'package:pocket_pal/src/providers/user_provider.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   final VoidCallback showRegisterPage;
@@ -12,16 +15,8 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   // 输入框
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-
-  // 登录按钮技术
-  Future signIn() async {
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: _emailController.text,
-      password: _passwordController.text,
-    );
-  }
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   // 收拾输入框
   @override
@@ -161,7 +156,21 @@ class _LoginPageState extends State<LoginPage> {
                       vertical: 20.0,
                     ),
                     child: GestureDetector(
-                      onTap: signIn,
+                      onTap: () async {
+                        bool loginSuccessful =
+                            await context.read<UserProvider>().login(
+                                  _emailController.text,
+                                  _passwordController.text,
+                                );
+                        if (!loginSuccessful) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                  '❌ incorrect credentials, please try again'),
+                            ),
+                          );
+                        }
+                      },
                       child: Container(
                         padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(

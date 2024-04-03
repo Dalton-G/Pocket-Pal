@@ -1,8 +1,8 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: use_build_context_synchronously
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:pocket_pal/src/providers/user_provider.dart';
+import 'package:provider/provider.dart';
 
 class RegisterPage extends StatefulWidget {
   final VoidCallback showLoginPage;
@@ -13,53 +13,19 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  // 输入框
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   final _nameController = TextEditingController();
 
-  // 角色
   final List<String> _roleOptions = ['member', 'admin', 'therapist'];
-  String _selectedRole = 'member'; // 原本 default
-
-  // 登录按钮技术
-  Future signUp() async {
-    if (passwordMatch()) {
-      try {
-        final UserCredential userCredential =
-            await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: _emailController.text,
-          password: _passwordController.text,
-        );
-        final String userId = userCredential.user!.uid;
-
-        // 用一样的 ID 添加用户详情
-        await addUserDetails(userId);
-      } catch (error) {
-        print("Error registering user: $error");
-      }
-    }
-  }
-
-  Future addUserDetails(String userId) async {
-    final Timestamp now = Timestamp.now();
-    await FirebaseFirestore.instance.collection('users').doc(userId).set({
-      'id': userId,
-      'name': _nameController.text.trim(),
-      'email': _emailController.text.trim(),
-      'role': _selectedRole,
-      'createdAt': now,
-      'updatedAt': now,
-    });
-  }
+  String _selectedRole = 'member';
 
   bool passwordMatch() =>
       _passwordController.text == _confirmPasswordController.text
           ? true
           : false;
 
-  // 收拾输入框
   @override
   void dispose() {
     _emailController.dispose();
@@ -243,11 +209,10 @@ class _RegisterPageState extends State<RegisterPage> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 15.0, right: 8.0), // Adjust padding
+                          padding:
+                              const EdgeInsets.only(left: 15.0, right: 8.0),
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment
-                                .spaceBetween, // Align items to the ends
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Expanded(
                                 child: DropdownButton<String>(
@@ -260,8 +225,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                       },
                                     );
                                   },
-                                  underline:
-                                      const SizedBox(), // Remove default underline
+                                  underline: const SizedBox(),
                                   items: _roleOptions
                                       .map<DropdownMenuItem<String>>(
                                     (String value) {
@@ -275,7 +239,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               ),
                               const Icon(
                                 Icons.arrow_drop_down,
-                              ), // Dropdown icon
+                              ),
                             ],
                           ),
                         ),
@@ -290,7 +254,32 @@ class _RegisterPageState extends State<RegisterPage> {
                       vertical: 20.0,
                     ),
                     child: GestureDetector(
-                      onTap: signUp,
+                      onTap: () async {
+                        if (passwordMatch()) {
+                          try {
+                            await context.read<UserProvider>().signUp(
+                                  _emailController.text.trim(),
+                                  _passwordController.text.trim(),
+                                  _nameController.text.trim(),
+                                  _selectedRole,
+                                );
+                          } catch (error) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text("Error registering user: $error"),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                          }
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("Passwords do not match"),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        }
+                      },
                       child: Container(
                         padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
