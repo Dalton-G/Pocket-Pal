@@ -1,59 +1,57 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pocket_pal/src/auth/auth_page.dart';
+import 'package:pocket_pal/src/models/user_model.dart';
 import 'package:pocket_pal/src/screens/admin/pages/admin_home_page.dart';
 import 'package:pocket_pal/src/screens/patient/member_navigator.dart';
 import 'package:pocket_pal/src/screens/therapist/pages/therapist_home_page.dart';
+import 'package:provider/provider.dart';
+import 'package:pocket_pal/src/providers/user_provider.dart';
 
-class MainPage extends StatelessWidget {
+class MainPage extends StatefulWidget {
   const MainPage({super.key});
 
   @override
+  MainPageState createState() => MainPageState();
+}
+
+class MainPageState extends State<MainPage> {
+  Future<void>? _fetchUserModelFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserModelFuture = context.read<UserProvider>().fetchAndSetUserModel();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: StreamBuilder<User?>(
-        stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CircularProgressIndicator();
-          }
-          if (snapshot.hasData) {
-            final User user = snapshot.data!;
-            return FutureBuilder<DocumentSnapshot>(
-              future: FirebaseFirestore.instance
-                  .collection('users')
-                  .doc(user.uid)
-                  .get(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-                if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
-                }
-                if (snapshot.hasData && snapshot.data!.exists) {
-                  final data = snapshot.data!.data() as Map<String, dynamic>;
-                  final String role = data['role'];
-                  if (role == 'member') {
-                    return const MemberNavigator();
-                  } else if (role == 'admin') {
-                    return const AdminHomePage();
-                  } else if (role == 'therapist') {
-                    return const TherapistHomePage();
-                  } else {
-                    return const Text('Role not recognized.');
-                  }
+    return FutureBuilder(
+      future: _fetchUserModelFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else {
+          return Selector<UserProvider, UserModel?>(
+            selector: (_, provider) => provider.userModel,
+            builder: (_, userModel, __) {
+              if (userModel == null) {
+                return const AuthPage();
+              } else {
+                final String role = userModel.role;
+                if (role == 'member') {
+                  return const MemberNavigator();
+                } else if (role == 'admin') {
+                  return const AdminHomePage();
+                } else if (role == 'therapist') {
+                  return const TherapistHomePage();
                 } else {
-                  return const Text('User data not found.');
+                  return const Text('Role not recognized.');
                 }
-              },
-            );
-          } else {
-            return const AuthPage();
-          }
-        },
-      ),
+              }
+            },
+          );
+        }
+      },
     );
   }
 }
