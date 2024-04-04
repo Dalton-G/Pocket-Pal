@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:pocket_pal/src/providers/role_provider.dart';
 import 'package:pocket_pal/src/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -19,7 +20,6 @@ class _RegisterPageState extends State<RegisterPage> {
   final _nameController = TextEditingController();
 
   final List<String> _roleOptions = ['member', 'admin', 'therapist'];
-  String _selectedRole = 'member';
 
   bool passwordMatch() =>
       _passwordController.text == _confirmPasswordController.text
@@ -214,29 +214,27 @@ class _RegisterPageState extends State<RegisterPage> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Expanded(
-                                child: DropdownButton<String>(
-                                  iconSize: 0,
-                                  value: _selectedRole,
-                                  onChanged: (String? newValue) {
-                                    setState(
-                                      () {
-                                        _selectedRole = newValue!;
-                                      },
-                                    );
-                                  },
-                                  underline: const SizedBox(),
-                                  items: _roleOptions
-                                      .map<DropdownMenuItem<String>>(
-                                    (String value) {
-                                      return DropdownMenuItem<String>(
-                                        value: value,
-                                        child: Text(value),
-                                      );
+                              Expanded(child: Consumer<RoleProvider>(
+                                builder: (context, roleProvider, child) {
+                                  return DropdownButton<String>(
+                                    iconSize: 0,
+                                    value: roleProvider.selectedRole,
+                                    onChanged: (String? newValue) {
+                                      roleProvider.setSelectedRole(newValue!);
                                     },
-                                  ).toList(),
-                                ),
-                              ),
+                                    underline: const SizedBox(),
+                                    items: _roleOptions
+                                        .map<DropdownMenuItem<String>>(
+                                      (String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(value),
+                                        );
+                                      },
+                                    ).toList(),
+                                  );
+                                },
+                              )),
                               const Icon(
                                 Icons.arrow_drop_down,
                               ),
@@ -261,7 +259,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   _emailController.text.trim(),
                                   _passwordController.text.trim(),
                                   _nameController.text.trim(),
-                                  _selectedRole,
+                                  context.watch<RoleProvider>().selectedRole,
                                 );
                           } catch (error) {
                             ScaffoldMessenger.of(context).showSnackBar(

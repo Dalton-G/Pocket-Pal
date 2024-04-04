@@ -86,4 +86,13 @@ class UserProvider extends ChangeNotifier {
       },
     );
   }
+
+  Future<void> fetchAndSetUserModel() async {
+    if (_auth.currentUser != null) {
+      DocumentSnapshot userDoc =
+          await _db.collection('users').doc(_auth.currentUser!.uid).get();
+      UserModel userModel = UserModel.fromDocument(userDoc);
+      setUser(userModel);
+    }
+  }
 }
