@@ -1,3 +1,5 @@
+import 'package:pocket_pal/src/providers/auth_provider.dart';
+import 'package:pocket_pal/src/providers/role_provider.dart';
 import 'package:pocket_pal/src/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:pocket_pal/src/providers/onboarding_page_provider.dart';
@@ -14,6 +16,12 @@ class Providers {
     ),
     ChangeNotifierProvider<UserProvider>(
       create: (_) => UserProvider(),
+    ),
+    ChangeNotifierProvider<AuthPageProvider>(
+      create: (_) => AuthPageProvider(),
+    ),
+    ChangeNotifierProvider<RoleProvider>(
+      create: (_) => RoleProvider(),
     ),
   ].toList();
 }
