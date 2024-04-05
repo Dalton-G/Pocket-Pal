@@ -259,7 +259,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   _emailController.text.trim(),
                                   _passwordController.text.trim(),
                                   _nameController.text.trim(),
-                                  context.watch<RoleProvider>().selectedRole,
+                                  context.read<RoleProvider>().selectedRole,
                                 );
                           } catch (error) {
                             ScaffoldMessenger.of(context).showSnackBar(
