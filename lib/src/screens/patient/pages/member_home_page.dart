@@ -16,7 +16,6 @@ class MemberHomePage extends StatelessWidget {
 
       // APP BAR
       appBar: AppBar(
-        foregroundColor: Colors.white,
         title: const Text(
           'Home Page',
         ),
