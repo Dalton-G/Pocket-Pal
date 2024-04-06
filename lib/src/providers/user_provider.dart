@@ -65,8 +65,8 @@ class UserProvider extends ChangeNotifier {
         password: password,
       );
       final String userId = userCredential.user!.uid;
-
       await addUserDetails(userId, name, email, role);
+      await fetchAndSetUserModel();
     } catch (error) {
       print("Error registering user: $error");
     }
