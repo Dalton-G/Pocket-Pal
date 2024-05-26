@@ -81,8 +81,8 @@ class UserProvider extends ChangeNotifier {
         'name': name.trim(),
         'email': email.trim(),
         'role': role,
-        'createdAt': now,
-        'updatedAt': now,
+        'created_at': now,
+        'updated_at': now,
       },
     );
   }

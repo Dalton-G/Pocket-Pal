@@ -12,17 +12,14 @@ class ForgotPasswordPage extends StatefulWidget {
 }
 
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
-  // 输入框
   final _emailController = TextEditingController();
 
-  // 收拾输入框
   @override
   void dispose() {
     _emailController.dispose();
     super.dispose();
   }
 
-  // 开始
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,13 +41,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           const Text(
             'Enter your email and we will send you a password reset link.',
           ),
-
-          // 空位
           const SizedBox(
             height: 20,
           ),
-
-          // 电子资讯
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 25.0),
             child: Container(
@@ -77,13 +70,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
               ),
             ),
           ),
-
-          // 空位
           const SizedBox(
             height: 20,
           ),
-
-          // 按钮
           MaterialButton(
             onPressed: () async {
               await context
