@@ -19,20 +19,10 @@ class OnboardingPage extends StatelessWidget {
         PageController(initialPage: provider.currentPageIndex);
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       body: Stack(
         children: [
-          PageView(
-            controller: pageController, // Pass the PageController to PageView
-            onPageChanged: (index) {
-              provider.setCurrentPageIndex(index);
-            },
-            children: const [
-              IntroPage1(),
-              IntroPage2(),
-              IntroPage3(),
-            ],
-          ),
           Container(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -66,6 +56,17 @@ class OnboardingPage extends StatelessWidget {
               ],
             ),
           ),
+          PageView(
+            controller: pageController, // Pass the PageController to PageView
+            onPageChanged: (index) {
+              provider.setCurrentPageIndex(index);
+            },
+            children: const [
+              IntroPage1(),
+              IntroPage2(),
+              IntroPage3(),
+            ],
+          ),
           Container(
             alignment: const Alignment(0, 0.75),
             child: Column(
@@ -87,7 +88,7 @@ class OnboardingPage extends StatelessWidget {
                 const SizedBox(height: 20),
                 GestureDetector(
                   onTap: () {
-                    Navigator.pushReplacementNamed(context, '/main-page');
+                    Navigator.pushNamed(context, '/main-page');
                   },
                   child: Container(
                     width: 180,

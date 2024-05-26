@@ -1,8 +1,11 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:pocket_pal/src/auth/forgot_password.dart';
 import 'package:pocket_pal/src/providers/user_provider.dart';
+import 'package:pocket_pal/src/widgets/auth/alertDialog.dart';
+import 'package:pocket_pal/src/widgets/auth/authButton.dart';
+import 'package:pocket_pal/src/widgets/auth/textFields.dart';
+import 'package:pocket_pal/theme/app_theme.dart';
 import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
@@ -14,11 +17,10 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  // 输入框
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
-  // 收拾输入框
   @override
   void dispose() {
     _emailController.dispose();
@@ -26,199 +28,138 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-  // 开始
+  void _validateAndLogin(BuildContext context) async {
+    if (_formKey.currentState!.validate()) {
+      bool loginSuccessful = await context.read<UserProvider>().login(
+            _emailController.text,
+            _passwordController.text,
+          );
+      if (!loginSuccessful) {
+        showAuthErrorDialog(
+          context,
+          'Login Failed',
+          'Incorrect credentails, please try again',
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+    final screenHeight = screenSize.height;
+    final screenWidth = screenSize.width;
+
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 40),
-            child: SingleChildScrollView(
+      backgroundColor: AppTheme.backgroundWhite,
+      resizeToAvoidBottomInset: false,
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('lib/src/assets/images/dottedlinebg.png'),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+          ),
+          SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 35.0),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // 图案
-                  const Text(
-                    'Login',
-                    style: TextStyle(
-                      fontSize: 48,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-
-                  // 空位
-                  const SizedBox(
-                    height: 20,
-                  ),
-
-                  // 电子资讯
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  const SizedBox(height: 50),
+                  InkWell(
+                    onTap: () async {
+                      // FocusScope.of(context).unfocus();
+                      // await Future.delayed(Duration(milliseconds: 250));
+                      Navigator.pop(context);
+                    },
                     child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        border: Border.all(
-                          color: Colors.white,
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 15.0),
-                        child: TextField(
-                          controller: _emailController,
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            hintText: 'email',
-                          ),
-                          style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
+                      width: 40,
+                      height: 40,
+                      decoration: AppTheme.authBackButton,
+                      child: const Icon(
+                        Icons.arrow_back,
+                        color: AppTheme.primaryGreen,
+                        size: 24,
                       ),
                     ),
                   ),
-
-                  // 空位
-                  const SizedBox(
-                    height: 20,
-                  ),
-
-                  // 密码
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        border: Border.all(
-                          color: Colors.white,
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 15.0),
-                        child: TextField(
-                          controller: _passwordController,
-                          obscureText: true,
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            hintText: 'password',
-                          ),
-                          style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  // 空位
-                  const SizedBox(
-                    height: 20,
-                  ),
-
-                  // 忘记密码
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                  const SizedBox(height: 50),
+                  Text("Login", style: AppTheme.largeTextGreen),
+                  Text("Account", style: AppTheme.largeTextGrey),
+                  SizedBox(height: screenHeight * 0.08),
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) {
-                                  return const ForgotPasswordPage();
-                                },
-                              ),
-                            );
-                          },
-                          child: const Text(
-                            'Forgot Password?',
-                            style: TextStyle(
-                              color: Colors.blue,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                        Text("Your Email:", style: AppTheme.normalTextGrey),
+                        const SizedBox(height: 10),
+                        AuthTextField(
+                          hintText: "Enter your email",
+                          obscureText: false,
+                          controller: _emailController,
+                          mainColor: AppTheme.secondaryGreen,
+                          width: screenWidth,
+                        ),
+                        const SizedBox(height: 10),
+                        Text("Your Password:", style: AppTheme.normalTextGrey),
+                        const SizedBox(height: 10),
+                        AuthTextField(
+                          hintText: "Enter your password",
+                          obscureText: true,
+                          controller: _passwordController,
+                          mainColor: AppTheme.secondaryGreen,
+                          width: screenWidth,
                         ),
                       ],
                     ),
                   ),
-
-                  // 登录按钮
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 25.0,
-                      vertical: 20.0,
-                    ),
-                    child: GestureDetector(
-                      onTap: () async {
-                        bool loginSuccessful =
-                            await context.read<UserProvider>().login(
-                                  _emailController.text,
-                                  _passwordController.text,
-                                );
-                        if (!loginSuccessful) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text(
-                                  '❌ incorrect credentials, please try again'),
-                            ),
-                          );
-                        }
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: Colors.blue,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: const Center(
-                          child: Text(
-                            "Sign In",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w800,
-                            ),
-                          ),
+                  const SizedBox(height: 5),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      GestureDetector(
+                        onTap: () => Navigator.pushNamed(context, "/forgot-pw"),
+                        child: Text(
+                          "Forgot password?",
+                          style: AppTheme.smallTextGreen,
                         ),
                       ),
-                    ),
+                    ],
                   ),
-
-                  // 注册按钮
+                  const SizedBox(height: 45),
+                  AuthButton(
+                    buttonText: "Sign In",
+                    onTap: () => _validateAndLogin(context),
+                  ),
+                  const SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "Don't have an account? ",
-                        style: TextStyle(
-                          color: Colors.grey[700],
-                          fontSize: 18,
-                        ),
+                        "Don't have an account?",
+                        style: AppTheme.smallTextGrey,
                       ),
                       GestureDetector(
                         onTap: widget.showRegisterPage,
                         child: Text(
-                          "Register Now",
-                          style: TextStyle(
-                            color: Colors.blue[600],
-                            fontSize: 18,
-                          ),
+                          " Register now.",
+                          style: AppTheme.smallTextGreen,
                         ),
                       ),
                     ],
-                  )
+                  ),
                 ],
               ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }

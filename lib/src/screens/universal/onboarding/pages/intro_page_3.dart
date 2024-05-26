@@ -7,7 +7,7 @@ class IntroPage3 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.backgroundWhite,
+      backgroundColor: Colors.transparent,
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,

@@ -90,7 +90,53 @@ class AppTheme {
     fontFamily: 'Nunito',
   );
 
-  // onboarding page
+  // Common
+  static const TextStyle largeTextGreen = TextStyle(
+    fontSize: 40.0,
+    color: primaryGreen,
+    fontFamily: 'Nunito',
+    fontWeight: FontWeight.bold,
+    height: 1,
+  );
+  static const TextStyle largeTextGrey = TextStyle(
+    fontSize: 40.0,
+    color: slateGrey,
+    fontFamily: 'Nunito',
+    fontWeight: FontWeight.bold,
+    height: 1,
+  );
+  static const TextStyle mediumTextGreen = TextStyle(
+    fontSize: 24.0,
+    color: primaryGreen,
+    fontFamily: 'Nunito',
+    fontWeight: FontWeight.bold,
+  );
+  static const TextStyle normalTextGrey = TextStyle(
+    fontSize: 16.0,
+    color: slateGrey,
+    fontFamily: 'Nunito',
+    fontWeight: FontWeight.w600,
+  );
+  static const TextStyle normalTextWhite = TextStyle(
+    fontSize: 16.0,
+    color: backgroundWhite,
+    fontFamily: 'Nunito',
+    fontWeight: FontWeight.w600,
+  );
+  static const TextStyle smallTextGreen = TextStyle(
+    fontSize: 14.0,
+    color: primaryGreen,
+    fontFamily: 'Nunito',
+    fontWeight: FontWeight.w600,
+  );
+  static const TextStyle smallTextGrey = TextStyle(
+    fontSize: 14.0,
+    color: slateGrey,
+    fontFamily: 'Nunito',
+    fontWeight: FontWeight.w600,
+  );
+
+  // Onboarding Page Styles
   static const TextStyle onboardingTextH1 = TextStyle(
     fontSize: 16.0,
     color: slateGrey,
@@ -118,6 +164,26 @@ class AppTheme {
     color: white,
     fontFamily: 'Nunito',
     fontWeight: FontWeight.bold,
+  );
+
+  // Auth Page Styles
+  static BoxDecoration authBackButton = BoxDecoration(
+    color: white,
+    shape: BoxShape.circle,
+    boxShadow: [
+      BoxShadow(
+        color: Colors.grey.withOpacity(0.5),
+        spreadRadius: 2,
+        blurRadius: 5,
+        offset: const Offset(0, 3),
+      ),
+    ],
+  );
+  static const TextStyle textFieldHint1 = TextStyle(
+    fontSize: 16.0,
+    color: primaryGreen,
+    fontFamily: 'Nunito',
+    height: 0.75,
   );
 
   // static final ThemeData darkTheme = ThemeData(
