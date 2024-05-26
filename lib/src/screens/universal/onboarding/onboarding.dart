@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pocket_pal/theme/app_theme.dart';
 import 'package:provider/provider.dart';
 import 'package:pocket_pal/src/screens/universal/onboarding/pages/intro_page_1.dart';
 import 'package:pocket_pal/src/screens/universal/onboarding/pages/intro_page_2.dart';
@@ -33,60 +34,73 @@ class OnboardingPage extends StatelessWidget {
             ],
           ),
           Container(
-            alignment: const Alignment(0, 0.85),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                GestureDetector(
-                  onTap: () {
-                    provider.setCurrentPageIndex(2);
-                  },
-                  child: const Text(
-                    'Skip',
-                    style: TextStyle(
-                      fontFamily: 'Nunito',
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
+                Container(
+                  width: double.infinity,
+                  child:
+                      Image.asset('lib/src/assets/images/abstractcontour2.png'),
                 ),
+              ],
+            ),
+          ),
+          Container(
+            child: Column(children: [
+              Container(
+                width: double.infinity,
+                child: Image.asset('lib/src/assets/images/abstractcontour.png'),
+              ),
+            ]),
+          ),
+          Container(
+            alignment: const Alignment(0, 0.9),
+            child: Column(
+              children: [
+                const SizedBox(height: 50),
+                Container(
+                  height: 35,
+                  child: Image.asset(
+                      'lib/src/assets/images/pocketpallogowithword.png'),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            alignment: const Alignment(0, 0.75),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
                 SmoothPageIndicator(
                   controller:
                       pageController, // Pass the PageController to SmoothPageIndicator
                   count: 3,
                   effect: const ExpandingDotsEffect(
-                    activeDotColor: Colors.blue,
-                    dotColor: Colors.grey,
-                    dotHeight: 10,
-                    dotWidth: 10,
-                    spacing: 10,
+                    activeDotColor: AppTheme.primaryGreen,
+                    dotColor: AppTheme.primaryOrange,
+                    dotHeight: 8,
+                    dotWidth: 8,
+                    spacing: 8,
                     expansionFactor: 3,
                   ),
                 ),
+                const SizedBox(height: 20),
                 GestureDetector(
                   onTap: () {
-                    if (provider.currentPageIndex == 2) {
-                      Navigator.pushReplacementNamed(
-                          context, '/member-navigator');
-                    } else {
-                      provider
-                          .setCurrentPageIndex(provider.currentPageIndex + 1);
-                      pageController.animateToPage(
-                        provider.currentPageIndex,
-                        duration: const Duration(milliseconds: 500),
-                        curve: Curves.easeInOut,
-                      );
-                    }
+                    Navigator.pushReplacementNamed(context, '/main-page');
                   },
-                  child: Text(
-                    provider.currentPageIndex == 2 ? 'Done' : 'Next',
-                    style: const TextStyle(
-                      fontFamily: 'Nunito',
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
+                  child: Container(
+                    width: 180,
+                    height: 50,
+                    alignment: Alignment.center,
+                    decoration: AppTheme.onboardingButton,
+                    child: const Text(
+                      "Get Started",
+                      style: AppTheme.onboardingButtonText,
                     ),
                   ),
                 ),
+                const SizedBox(height: 80),
               ],
             ),
           ),

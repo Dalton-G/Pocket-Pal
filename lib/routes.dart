@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pocket_pal/src/auth/auth_page.dart';
 import 'package:pocket_pal/src/auth/forgot_password.dart';
+import 'package:pocket_pal/src/auth/main_page.dart';
 import 'package:pocket_pal/src/screens/admin/pages/admin_home_page.dart';
 import 'package:pocket_pal/src/screens/patient/member_navigator.dart';
 import 'package:pocket_pal/src/screens/patient/pages/member_chat_page.dart';
@@ -33,6 +34,7 @@ class Routes {
     onboarding: (BuildContext context) => const OnboardingPage(),
     authPage: (BuildContext context) => const AuthPage(),
     forgotPW: (BuildContext context) => const ForgotPasswordPage(),
+    mainPage: (BuildContext context) => const MainPage(),
     memberHome: (BuildContext context) => const MemberHomePage(),
     memberSchedule: (BuildContext context) => const MemberSchedulePage(),
     memberChat: (BuildContext context) => const MemberChatPage(),

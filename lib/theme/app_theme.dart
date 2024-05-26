@@ -18,6 +18,9 @@ class AppTheme {
   static const Color black = Colors.black;
   static const Color iconColor = primaryGreen;
 
+  static const backgroundWhite = Color(0XFFFDF9F9);
+  static const slateGrey = Color(0XFF27344F);
+
   static final ThemeData lightTheme = ThemeData(
     scaffoldBackgroundColor: white,
     appBarTheme: const AppBarTheme(
@@ -85,6 +88,36 @@ class AppTheme {
     fontSize: 8.0,
     color: black,
     fontFamily: 'Nunito',
+  );
+
+  // onboarding page
+  static const TextStyle onboardingTextH1 = TextStyle(
+    fontSize: 16.0,
+    color: slateGrey,
+    fontWeight: FontWeight.w700,
+    fontFamily: 'Nunito',
+  );
+  static const TextStyle onboardingTextB1 = TextStyle(
+    fontSize: 14.0,
+    color: slateGrey,
+    fontFamily: 'Nunito',
+  );
+  static const TextStyle onboardingTextS1 = TextStyle(
+    fontSize: 16.0,
+    color: primaryGreen,
+    fontFamily: 'Nunito',
+    fontWeight: FontWeight.w700,
+    fontStyle: FontStyle.italic,
+  );
+  static const BoxDecoration onboardingButton = BoxDecoration(
+    color: primaryGreen,
+    borderRadius: BorderRadius.all(Radius.circular(10)),
+  );
+  static const TextStyle onboardingButtonText = TextStyle(
+    fontSize: 16.0,
+    color: white,
+    fontFamily: 'Nunito',
+    fontWeight: FontWeight.bold,
   );
 
   // static final ThemeData darkTheme = ThemeData(
