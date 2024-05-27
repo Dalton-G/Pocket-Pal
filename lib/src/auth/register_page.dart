@@ -45,8 +45,6 @@ class _RegisterPageState extends State<RegisterPage> {
     });
   }
 
-  void saveProfile() async {}
-
   @override
   void dispose() {
     super.dispose();
