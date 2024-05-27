@@ -1,7 +1,9 @@
 // ignore_for_file: avoid_print
+import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:pocket_pal/src/models/user_model.dart';
 
@@ -9,6 +11,7 @@ class UserProvider extends ChangeNotifier {
   UserModel? _userModel;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _db = FirebaseFirestore.instance;
+  final FirebaseStorage _storage = FirebaseStorage.instance;
 
   UserModel? get userModel => _userModel;
 
@@ -65,6 +68,7 @@ class UserProvider extends ChangeNotifier {
     String gender,
     String role,
     String date_of_birth,
+    Uint8List? profile_picture,
   ) async {
     try {
       final UserCredential userCredential =
@@ -73,6 +77,13 @@ class UserProvider extends ChangeNotifier {
         password: password,
       );
       final String user_id = userCredential.user!.uid;
+      String imageUrl;
+      if (profile_picture != null) {
+        imageUrl = await uploadProfilePic('profile_pictures/$user_id',
+            profile_picture); // Upload profile picture to Firebase Storage
+      } else {
+        imageUrl = '';
+      }
       await addUserDetails(
         user_id,
         email,
@@ -82,6 +93,7 @@ class UserProvider extends ChangeNotifier {
         gender,
         role,
         date_of_birth,
+        imageUrl,
       );
       await fetchAndSetUserModel();
     } catch (error) {
@@ -98,6 +110,7 @@ class UserProvider extends ChangeNotifier {
     String gender,
     String role,
     String date_of_birth,
+    String imageUrl,
   ) async {
     final Timestamp now = Timestamp.now();
     await _db.collection('users').doc(user_id).set(
@@ -106,7 +119,7 @@ class UserProvider extends ChangeNotifier {
         'email': email.trim(),
         'first_name': first_name.trim(),
         'last_name': last_name.trim(),
-        'profile_picture': '',
+        'profile_picture': imageUrl,
         'phone': phone.trim(),
         'gender': gender,
         'role': role,
@@ -125,5 +138,13 @@ class UserProvider extends ChangeNotifier {
       UserModel userModel = UserModel.fromDocument(userDoc);
       setUser(userModel);
     }
+  }
+
+  Future<String> uploadProfilePic(String childName, Uint8List file) async {
+    Reference ref = _storage.ref().child(childName);
+    UploadTask uploadTask = ref.putData(file);
+    TaskSnapshot snapshot = await uploadTask;
+    String downloadUrl = await snapshot.ref.getDownloadURL();
+    return downloadUrl;
   }
 }
