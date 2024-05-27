@@ -5,7 +5,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pocket_pal/src/providers/user_provider.dart';
-import 'package:pocket_pal/src/utils/pickImage.dart';
+import 'package:pocket_pal/src/utils/pick_image.dart';
 import 'package:pocket_pal/src/widgets/auth/authButton.dart';
 import 'package:pocket_pal/src/widgets/auth/avatarAdd.dart';
 import 'package:pocket_pal/src/widgets/auth/dateTextFields.dart';
@@ -68,6 +68,7 @@ class _RegisterPageState extends State<RegisterPage> {
               currentGender,
               currentRole,
               _dobController.text.trim(),
+              _image,
             );
       } catch (error) {
         ScaffoldMessenger.of(context).showSnackBar(
