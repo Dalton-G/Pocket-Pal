@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:pocket_pal/src/providers/user_provider.dart';
 import 'package:pocket_pal/src/widgets/auth/alertDialog.dart';
 import 'package:pocket_pal/src/widgets/auth/authButton.dart';
-import 'package:pocket_pal/src/widgets/auth/textFields.dart';
+import 'package:pocket_pal/src/widgets/auth/authTextFields.dart';
 import 'package:pocket_pal/theme/app_theme.dart';
 import 'package:provider/provider.dart';
 

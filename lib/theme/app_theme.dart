@@ -105,6 +105,20 @@ class AppTheme {
     fontWeight: FontWeight.bold,
     height: 1,
   );
+  static const TextStyle largeTextGreen2 = TextStyle(
+    fontSize: 36.0,
+    color: primaryGreen,
+    fontFamily: 'Nunito',
+    fontWeight: FontWeight.bold,
+    height: 1,
+  );
+  static const TextStyle largeTextGrey2 = TextStyle(
+    fontSize: 36.0,
+    color: slateGrey,
+    fontFamily: 'Nunito',
+    fontWeight: FontWeight.bold,
+    height: 1,
+  );
   static const TextStyle mediumTextGreen = TextStyle(
     fontSize: 24.0,
     color: primaryGreen,
@@ -184,6 +198,10 @@ class AppTheme {
     color: primaryGreen,
     fontFamily: 'Nunito',
     height: 0.75,
+  );
+  static const BoxDecoration lightGreenBorder = BoxDecoration(
+    color: secondaryGreen,
+    borderRadius: BorderRadius.all(Radius.circular(10)),
   );
 
   // static final ThemeData darkTheme = ThemeData(
