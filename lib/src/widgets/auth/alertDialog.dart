@@ -2,13 +2,13 @@
 import 'package:flutter/material.dart';
 import 'package:pocket_pal/theme/app_theme.dart';
 
-class AuthErrorDialog extends StatelessWidget {
+class AuthDialog extends StatelessWidget {
   // Attributes
   final String title;
   final String content;
 
   // Constructor
-  const AuthErrorDialog({
+  const AuthDialog({
     Key? key,
     required this.title,
     required this.content,
@@ -38,11 +38,11 @@ class AuthErrorDialog extends StatelessWidget {
 }
 
 // Method
-void showAuthErrorDialog(BuildContext context, String title, String content) {
+void showAuthDialog(BuildContext context, String title, String content) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
-      return AuthErrorDialog(
+      return AuthDialog(
         title: title,
         content: content,
       );

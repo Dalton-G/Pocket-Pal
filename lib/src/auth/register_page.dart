@@ -1,8 +1,20 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
-import 'package:pocket_pal/src/providers/role_provider.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:pocket_pal/src/providers/user_provider.dart';
+import 'package:pocket_pal/src/utils/pickImage.dart';
+import 'package:pocket_pal/src/widgets/auth/authButton.dart';
+import 'package:pocket_pal/src/widgets/auth/avatarAdd.dart';
+import 'package:pocket_pal/src/widgets/auth/dateTextFields.dart';
+import 'package:pocket_pal/src/widgets/auth/emailTextFields.dart';
+import 'package:pocket_pal/src/widgets/auth/radioSelector.dart';
+import 'package:pocket_pal/src/widgets/auth/nameTextFields.dart';
+import 'package:pocket_pal/src/widgets/auth/phoneTextFields.dart';
+import 'package:pocket_pal/src/widgets/auth/pwTextFields.dart';
+import 'package:pocket_pal/theme/app_theme.dart';
 import 'package:provider/provider.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -13,319 +25,246 @@ class RegisterPage extends StatefulWidget {
   State<RegisterPage> createState() => _RegisterPageState();
 }
 
+List<String> genderOptions = ['Male', 'Female'];
+List<String> roleOptions = ['Member', 'Therapist'];
+
 class _RegisterPageState extends State<RegisterPage> {
+  Uint8List? _image;
+  final _firstNameController = TextEditingController();
+  final _lastNameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _confirmPasswordController = TextEditingController();
-  final _nameController = TextEditingController();
+  final _phoneNumController = TextEditingController();
+  final _dobController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
-  final List<String> _roleOptions = ['member', 'admin', 'therapist'];
-
-  bool passwordMatch() =>
-      _passwordController.text == _confirmPasswordController.text
-          ? true
-          : false;
-
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    _confirmPasswordController.dispose();
-    _nameController.dispose();
-    super.dispose();
+  void selectImage() async {
+    Uint8List img = await pickImage(ImageSource.gallery);
+    setState(() {
+      _image = img;
+    });
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _firstNameController.dispose();
+    _lastNameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _phoneNumController.dispose();
+    _dobController.dispose();
+  }
+
+  void _validateAndSignUp(BuildContext context) async {
+    if (_formKey.currentState!.validate()) {
+      try {
+        await context.read<UserProvider>().signUp(
+              _emailController.text.trim(),
+              _passwordController.text.trim(),
+              _firstNameController.text.trim(),
+              _lastNameController.text.trim(),
+              _phoneNumController.text.trim(),
+              currentGender,
+              currentRole,
+              _dobController.text.trim(),
+            );
+      } catch (error) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Error registering user: $error"),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
+  String currentGender = genderOptions[0];
+  String currentRole = roleOptions[0];
+
+  @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+    final screenHeight = screenSize.height;
+    final screenWidth = screenSize.width;
+
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 40),
-            child: SingleChildScrollView(
+      backgroundColor: AppTheme.backgroundWhite,
+      resizeToAvoidBottomInset: false,
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('lib/src/assets/images/dottedlinebg.png'),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+          ),
+          SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 35.0),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // 图案
-                  const Text(
-                    'Registration',
-                    style: TextStyle(
-                      fontSize: 48,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-
-                  // 空位
-                  const SizedBox(
-                    height: 20,
-                  ),
-
-                  // 姓名
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  const SizedBox(height: 50),
+                  InkWell(
+                    onTap: () async {
+                      Navigator.pop(context);
+                    },
                     child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        border: Border.all(
-                          color: Colors.white,
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 15.0),
-                        child: TextField(
-                          controller: _nameController,
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            hintText: 'name',
-                          ),
-                          style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
+                      width: 40,
+                      height: 40,
+                      decoration: AppTheme.authBackButton,
+                      child: const Icon(
+                        Icons.arrow_back,
+                        color: AppTheme.primaryGreen,
+                        size: 24,
                       ),
                     ),
                   ),
-
-                  // 空位
-                  const SizedBox(
-                    height: 20,
-                  ),
-
-                  // 电子资讯
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        border: Border.all(
-                          color: Colors.white,
+                  const SizedBox(height: 30),
+                  Row(children: [
+                    Text("Register ", style: AppTheme.largeTextGreen2),
+                    Text("Account", style: AppTheme.largeTextGrey2),
+                  ]),
+                  SizedBox(height: screenHeight * 0.04),
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            CustomAvatar(
+                              onPressed: selectImage,
+                              imageSrc: _image,
+                            ),
+                            NameTextField(
+                              controller: _firstNameController,
+                              hintText: "First name",
+                              width: screenWidth,
+                            ),
+                            NameTextField(
+                              controller: _lastNameController,
+                              hintText: "Last name",
+                              width: screenWidth,
+                            ),
+                          ],
                         ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 15.0),
-                        child: TextField(
+                        const SizedBox(height: 25),
+                        EmailTextField(
                           controller: _emailController,
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            hintText: 'email',
-                          ),
-                          style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w400,
-                          ),
+                          width: screenWidth,
                         ),
-                      ),
-                    ),
-                  ),
-
-                  // 空位
-                  const SizedBox(
-                    height: 20,
-                  ),
-
-                  // 密码
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        border: Border.all(
-                          color: Colors.white,
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 15.0),
-                        child: TextField(
+                        const SizedBox(height: 20),
+                        PasswordTextField(
                           controller: _passwordController,
-                          obscureText: true,
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            hintText: 'password',
-                          ),
-                          style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w400,
-                          ),
+                          width: screenWidth,
                         ),
-                      ),
-                    ),
-                  ),
-
-                  // 空位
-                  const SizedBox(
-                    height: 20,
-                  ),
-
-                  // 密码确认
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        border: Border.all(
-                          color: Colors.white,
+                        const SizedBox(height: 20),
+                        PhoneTextField(
+                          controller: _phoneNumController,
+                          width: screenWidth,
                         ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 15.0),
-                        child: TextField(
-                          controller: _confirmPasswordController,
-                          obscureText: true,
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            hintText: 'confirm password',
-                          ),
-                          style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w400,
-                          ),
+                        const SizedBox(height: 20),
+                        DateTextField(
+                          controller: _dobController,
+                          width: screenWidth,
                         ),
-                      ),
-                    ),
-                  ),
-
-                  // 空位
-                  const SizedBox(
-                    height: 20,
-                  ),
-
-                  // 选择角色
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          border: Border.all(
-                            color: Colors.white,
-                          ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Padding(
-                          padding:
-                              const EdgeInsets.only(left: 15.0, right: 8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(child: Consumer<RoleProvider>(
-                                builder: (context, roleProvider, child) {
-                                  return DropdownButton<String>(
-                                    iconSize: 0,
-                                    value: roleProvider.selectedRole,
-                                    onChanged: (String? newValue) {
-                                      roleProvider.setSelectedRole(newValue!);
-                                    },
-                                    underline: const SizedBox(),
-                                    items: _roleOptions
-                                        .map<DropdownMenuItem<String>>(
-                                      (String value) {
-                                        return DropdownMenuItem<String>(
-                                          value: value,
-                                          child: Text(value),
-                                        );
-                                      },
-                                    ).toList(),
-                                  );
-                                },
-                              )),
-                              const Icon(
-                                Icons.arrow_drop_down,
+                        const SizedBox(height: 20),
+                        Stack(
+                          children: [
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: Container(
+                                width: screenWidth / 2,
+                                height: 50,
+                                decoration: AppTheme.lightGreenBorder,
                               ),
-                            ],
-                          ),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Text("Gender: ", style: AppTheme.smallTextGrey),
+                                SizedBox(width: 1),
+                                RadioSelection(
+                                  option1: genderOptions[0],
+                                  option2: genderOptions[1],
+                                  groupValue: currentGender,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      currentGender = value;
+                                    });
+                                  },
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
-                      ),
-                    ),
-                  ),
-
-                  // 登录按钮
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 25.0,
-                      vertical: 20.0,
-                    ),
-                    child: GestureDetector(
-                      onTap: () async {
-                        if (passwordMatch()) {
-                          try {
-                            await context.read<UserProvider>().signUp(
-                                  _emailController.text.trim(),
-                                  _passwordController.text.trim(),
-                                  _nameController.text.trim(),
-                                  context.read<RoleProvider>().selectedRole,
-                                );
-                          } catch (error) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text("Error registering user: $error"),
-                                backgroundColor: Colors.red,
+                        const SizedBox(height: 20),
+                        Stack(
+                          children: [
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: Container(
+                                width: screenWidth / 1.65,
+                                height: 50,
+                                decoration: AppTheme.lightGreenBorder,
                               ),
-                            );
-                          }
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text("Passwords do not match"),
-                              backgroundColor: Colors.red,
                             ),
-                          );
-                        }
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: Colors.blue,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: const Center(
-                          child: Text(
-                            "Register",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w800,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Text("Role: ", style: AppTheme.smallTextGrey),
+                                RadioSelection(
+                                  option1: roleOptions[0],
+                                  option2: roleOptions[1],
+                                  groupValue: currentRole,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      currentRole = value;
+                                    });
+                                  },
+                                ),
+                              ],
                             ),
-                          ),
+                          ],
                         ),
-                      ),
+                        const SizedBox(height: 30),
+                        AuthButton(
+                          buttonText: "Sign Up",
+                          onTap: () => _validateAndSignUp(context),
+                        ),
+                        const SizedBox(height: 10),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Already have an account?",
+                              style: AppTheme.smallTextGrey,
+                            ),
+                            GestureDetector(
+                              onTap: widget.showLoginPage,
+                              child: Text(
+                                " Login now.",
+                                style: AppTheme.smallTextGreen,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                  ),
-
-                  // 注册按钮
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Already have an account? ",
-                        style: TextStyle(
-                          color: Colors.grey[700],
-                          fontSize: 18,
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: widget.showLoginPage,
-                        child: Text(
-                          "Login",
-                          style: TextStyle(
-                            color: Colors.blue[600],
-                            fontSize: 18,
-                          ),
-                        ),
-                      ),
-                    ],
                   )
                 ],
               ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }

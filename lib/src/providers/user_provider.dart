@@ -57,15 +57,32 @@ class UserProvider extends ChangeNotifier {
   }
 
   Future<void> signUp(
-      String email, String password, String name, String role) async {
+    String email,
+    String password,
+    String first_name,
+    String last_name,
+    String phone,
+    String gender,
+    String role,
+    String date_of_birth,
+  ) async {
     try {
       final UserCredential userCredential =
           await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
-      final String userId = userCredential.user!.uid;
-      await addUserDetails(userId, name, email, role);
+      final String user_id = userCredential.user!.uid;
+      await addUserDetails(
+        user_id,
+        email,
+        first_name,
+        last_name,
+        phone,
+        gender,
+        role,
+        date_of_birth,
+      );
       await fetchAndSetUserModel();
     } catch (error) {
       print("Error registering user: $error");
@@ -73,14 +90,28 @@ class UserProvider extends ChangeNotifier {
   }
 
   Future<void> addUserDetails(
-      String userId, String name, String email, String role) async {
+    String user_id,
+    String email,
+    String first_name,
+    String last_name,
+    String phone,
+    String gender,
+    String role,
+    String date_of_birth,
+  ) async {
     final Timestamp now = Timestamp.now();
-    await _db.collection('users').doc(userId).set(
+    await _db.collection('users').doc(user_id).set(
       {
-        'id': userId,
-        'name': name.trim(),
+        'id': user_id,
         'email': email.trim(),
+        'first_name': first_name.trim(),
+        'last_name': last_name.trim(),
+        'profile_picture': '',
+        'phone': phone.trim(),
+        'gender': gender,
         'role': role,
+        'is_banned': false,
+        'date_of_birth': date_of_birth,
         'created_at': now,
         'updated_at': now,
       },
