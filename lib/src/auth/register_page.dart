@@ -4,17 +4,15 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:pocket_pal/src/providers/role_provider.dart';
 import 'package:pocket_pal/src/providers/user_provider.dart';
 import 'package:pocket_pal/src/utils/pickImage.dart';
 import 'package:pocket_pal/src/widgets/auth/authButton.dart';
 import 'package:pocket_pal/src/widgets/auth/avatarAdd.dart';
 import 'package:pocket_pal/src/widgets/auth/dateTextFields.dart';
 import 'package:pocket_pal/src/widgets/auth/emailTextFields.dart';
-import 'package:pocket_pal/src/widgets/auth/genderSelector.dart';
+import 'package:pocket_pal/src/widgets/auth/radioSelector.dart';
 import 'package:pocket_pal/src/widgets/auth/nameTextFields.dart';
 import 'package:pocket_pal/src/widgets/auth/phoneTextFields.dart';
-import 'package:pocket_pal/src/widgets/auth/authTextFields.dart';
 import 'package:pocket_pal/src/widgets/auth/pwTextFields.dart';
 import 'package:pocket_pal/theme/app_theme.dart';
 import 'package:provider/provider.dart';
@@ -27,8 +25,8 @@ class RegisterPage extends StatefulWidget {
   State<RegisterPage> createState() => _RegisterPageState();
 }
 
-List<String> genderOptions = ['male', 'female'];
-List<String> roleOptions = ['member', 'therapist'];
+List<String> genderOptions = ['Male', 'Female'];
+List<String> roleOptions = ['Member', 'Therapist'];
 
 class _RegisterPageState extends State<RegisterPage> {
   Uint8List? _image;
@@ -38,8 +36,6 @@ class _RegisterPageState extends State<RegisterPage> {
   final _passwordController = TextEditingController();
   final _phoneNumController = TextEditingController();
   final _dobController = TextEditingController();
-  final _genderController = TextEditingController();
-  final _roleController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   void selectImage() async {
@@ -58,8 +54,30 @@ class _RegisterPageState extends State<RegisterPage> {
     _passwordController.dispose();
     _phoneNumController.dispose();
     _dobController.dispose();
-    _genderController.dispose();
-    _roleController.dispose();
+  }
+
+  void _validateAndSignUp(BuildContext context) async {
+    if (_formKey.currentState!.validate()) {
+      try {
+        await context.read<UserProvider>().signUp(
+              _emailController.text.trim(),
+              _passwordController.text.trim(),
+              _firstNameController.text.trim(),
+              _lastNameController.text.trim(),
+              _phoneNumController.text.trim(),
+              currentGender,
+              currentRole,
+              _dobController.text.trim(),
+            );
+      } catch (error) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Error registering user: $error"),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
   }
 
   String currentGender = genderOptions[0];
@@ -175,11 +193,13 @@ class _RegisterPageState extends State<RegisterPage> {
                                 Text("Gender: ", style: AppTheme.smallTextGrey),
                                 SizedBox(width: 1),
                                 RadioSelection(
-                                  option1: "Male",
-                                  option2: "Female",
-                                  currentGender: currentGender,
+                                  option1: genderOptions[0],
+                                  option2: genderOptions[1],
+                                  groupValue: currentGender,
                                   onChanged: (value) {
-                                    setState(() => currentGender = value);
+                                    setState(() {
+                                      currentGender = value;
+                                    });
                                   },
                                 ),
                               ],
@@ -202,11 +222,13 @@ class _RegisterPageState extends State<RegisterPage> {
                               children: [
                                 Text("Role: ", style: AppTheme.smallTextGrey),
                                 RadioSelection(
-                                  option1: "Member",
-                                  option2: "Therapist",
-                                  currentGender: currentRole,
+                                  option1: roleOptions[0],
+                                  option2: roleOptions[1],
+                                  groupValue: currentRole,
                                   onChanged: (value) {
-                                    setState(() => currentRole = value);
+                                    setState(() {
+                                      currentRole = value;
+                                    });
                                   },
                                 ),
                               ],
@@ -216,7 +238,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         const SizedBox(height: 30),
                         AuthButton(
                           buttonText: "Sign Up",
-                          onTap: () {},
+                          onTap: () => _validateAndSignUp(context),
                         ),
                         const SizedBox(height: 10),
                         Row(

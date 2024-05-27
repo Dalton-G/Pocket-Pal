@@ -30,7 +30,7 @@ class EmailTextFieldState extends State<EmailTextField> {
         validator: (value) {
           if (value == null || value.isEmpty) {
             return 'Field is required';
-          } else if (value.contains('@') && value.contains('.')) {
+          } else if (!(value.contains('@') && value.contains('.'))) {
             return "Invalid email format, must include '@' and '.')";
           }
           return null;

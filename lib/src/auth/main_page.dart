@@ -38,11 +38,11 @@ class MainPageState extends State<MainPage> {
                 return const AuthPage();
               } else {
                 final String role = userModel.role;
-                if (role == 'member') {
+                if (role == 'member' || role == 'Member') {
                   return const MemberNavigator();
-                } else if (role == 'admin') {
+                } else if (role == 'admin' || role == 'Admin') {
                   return const AdminHomePage();
-                } else if (role == 'therapist') {
+                } else if (role == 'therapist' || role == 'Therapist') {
                   return const TherapistHomePage();
                 } else {
                   return const Text('Role not recognized.');
