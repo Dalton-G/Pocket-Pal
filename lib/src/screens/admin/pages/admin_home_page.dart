@@ -32,7 +32,7 @@ class AdminHomePage extends StatelessWidget {
                       style: AppTheme.lightH2TextStyle),
                   Text('User Email: ${currentUser.email}',
                       style: AppTheme.lightH2TextStyle),
-                  Text('User Name: ${currentUser.first_name}',
+                  Text('User Name: ${currentUser.firstName}',
                       style: AppTheme.lightH2TextStyle),
                   Text('User Role: ${currentUser.role}',
                       style: AppTheme.lightH2TextStyle),

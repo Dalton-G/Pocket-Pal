@@ -62,13 +62,13 @@ class UserProvider extends ChangeNotifier {
   Future<void> signUp(
     String email,
     String password,
-    String first_name,
-    String last_name,
+    String firstName,
+    String lastName,
     String phone,
     String gender,
     String role,
-    String date_of_birth,
-    Uint8List? profile_picture,
+    String dateOfBirth,
+    Uint8List? profilePicture,
   ) async {
     try {
       final UserCredential userCredential =
@@ -76,25 +76,25 @@ class UserProvider extends ChangeNotifier {
         email: email,
         password: password,
       );
-      final String user_id = userCredential.user!.uid;
+      final String userId = userCredential.user!.uid;
       String imageUrl;
-      if (profile_picture != null) {
-        imageUrl = await uploadProfilePic('profile_pictures/$user_id',
-            profile_picture); // Upload profile picture to Firebase Storage
+
+      // check if profile picture is null
+      if (profilePicture != null) {
+        imageUrl = await uploadProfilePic('profile_pictures/$userId',
+            profilePicture); // Upload profile picture to Firebase Storage
       } else {
         imageUrl = '';
       }
-      await addUserDetails(
-        user_id,
-        email,
-        first_name,
-        last_name,
-        phone,
-        gender,
-        role,
-        date_of_birth,
-        imageUrl,
-      );
+
+      // check if role is therapist
+      if (role == 'Therapist') {
+        await addTherapistDetails(userId, email, firstName, lastName, phone,
+            gender, role, dateOfBirth, imageUrl);
+      } else {
+        await addUserDetails(userId, email, firstName, lastName, phone, gender,
+            role, dateOfBirth, imageUrl);
+      }
       await fetchAndSetUserModel();
     } catch (error) {
       print("Error registering user: $error");
@@ -102,31 +102,65 @@ class UserProvider extends ChangeNotifier {
   }
 
   Future<void> addUserDetails(
-    String user_id,
+    String userId,
     String email,
-    String first_name,
-    String last_name,
+    String firstName,
+    String lastName,
     String phone,
     String gender,
     String role,
-    String date_of_birth,
+    String dateOfBirth,
     String imageUrl,
   ) async {
     final Timestamp now = Timestamp.now();
-    await _db.collection('users').doc(user_id).set(
+    await _db.collection('users').doc(userId).set(
       {
-        'id': user_id,
+        'id': userId,
         'email': email.trim(),
-        'first_name': first_name.trim(),
-        'last_name': last_name.trim(),
+        'first_name': firstName.trim(),
+        'last_name': lastName.trim(),
         'profile_picture': imageUrl,
         'phone': phone.trim(),
         'gender': gender,
         'role': role,
         'is_banned': false,
-        'date_of_birth': date_of_birth,
+        'date_of_birth': dateOfBirth,
         'created_at': now,
         'updated_at': now,
+      },
+    );
+  }
+
+  Future<void> addTherapistDetails(
+    String userId,
+    String email,
+    String firstName,
+    String lastName,
+    String phone,
+    String gender,
+    String role,
+    String dateOfBirth,
+    String imageUrl,
+  ) async {
+    final Timestamp now = Timestamp.now();
+    await _db.collection('users').doc(userId).set(
+      {
+        'id': userId,
+        'email': email.trim(),
+        'first_name': firstName.trim(),
+        'last_name': lastName.trim(),
+        'profile_picture': imageUrl,
+        'phone': phone.trim(),
+        'gender': gender,
+        'role': role,
+        'is_banned': false,
+        'date_of_birth': dateOfBirth,
+        'created_at': now,
+        'updated_at': now,
+        'education': '',
+        'specialization': '',
+        'is_approved': false,
+        'is_submitted': false,
       },
     );
   }
