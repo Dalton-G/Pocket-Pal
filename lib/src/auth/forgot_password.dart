@@ -132,7 +132,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage>
                           controller: _emailController,
                           obscureText: false,
                           mainColor: AppTheme.secondaryGreen,
-                          width: screenWidth * 0.8,
+                          width: screenWidth,
                         ),
                         const SizedBox(height: 45),
                         AuthButton(

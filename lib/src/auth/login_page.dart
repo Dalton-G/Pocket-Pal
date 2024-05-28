@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:pocket_pal/src/providers/user_provider.dart';
 import 'package:pocket_pal/src/widgets/auth/alertDialog.dart';
 import 'package:pocket_pal/src/widgets/auth/authButton.dart';
-import 'package:pocket_pal/src/widgets/auth/authTextFields.dart';
+import 'package:pocket_pal/src/widgets/auth/emailTextFields.dart';
+import 'package:pocket_pal/src/widgets/auth/pwTextFields.dart';
 import 'package:pocket_pal/theme/app_theme.dart';
 import 'package:provider/provider.dart';
 
@@ -98,23 +99,17 @@ class _LoginPageState extends State<LoginPage> {
                       children: [
                         Text("Your Email:", style: AppTheme.normalTextGrey),
                         const SizedBox(height: 10),
-                        AuthTextField(
-                          hintText: "Enter your email",
-                          obscureText: false,
+                        EmailTextField(
                           controller: _emailController,
-                          mainColor: AppTheme.secondaryGreen,
                           width: screenWidth,
                         ),
                         const SizedBox(height: 10),
                         Text("Your Password:", style: AppTheme.normalTextGrey),
                         const SizedBox(height: 10),
-                        AuthTextField(
-                          hintText: "Enter your password",
-                          obscureText: true,
+                        PasswordTextField(
                           controller: _passwordController,
-                          mainColor: AppTheme.secondaryGreen,
                           width: screenWidth,
-                        ),
+                        )
                       ],
                     ),
                   ),

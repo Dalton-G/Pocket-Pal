@@ -19,6 +19,8 @@ class PasswordTextField extends StatefulWidget {
 }
 
 class PasswordTextFieldState extends State<PasswordTextField> {
+  bool _obscureText = true;
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -26,7 +28,7 @@ class PasswordTextFieldState extends State<PasswordTextField> {
       height: 50,
       child: TextFormField(
         controller: widget.controller,
-        obscureText: true,
+        obscureText: _obscureText,
         validator: (value) {
           if (value == null || value.isEmpty) {
             return 'Field is required';
@@ -35,6 +37,17 @@ class PasswordTextFieldState extends State<PasswordTextField> {
         },
         decoration: InputDecoration(
           prefixIcon: Icon(Icons.password, color: AppTheme.primaryGreen),
+          suffixIcon: IconButton(
+            icon: Icon(
+              _obscureText ? Icons.visibility_off : Icons.visibility,
+              color: AppTheme.primaryGreen,
+            ),
+            onPressed: () {
+              setState(() {
+                _obscureText = !_obscureText;
+              });
+            },
+          ),
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(color: AppTheme.secondaryGreen),
             borderRadius: BorderRadius.circular(10),

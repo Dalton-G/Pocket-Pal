@@ -30,9 +30,9 @@ class PhoneTextFieldState extends State<PhoneTextField> {
         validator: (value) {
           if (value == null || value.isEmpty) {
             return 'Field is required';
-          } else if (!(value.length >= 10) ||
+          } else if (!((value.length == 10) || (value.length == 11)) ||
               !RegExp(r'^[0-9]*$').hasMatch(value)) {
-            return "Invalid phone number format, must include at least 10 digits";
+            return "Invalid phone number format, must be between least 10-11 digits";
           }
           return null;
         },
