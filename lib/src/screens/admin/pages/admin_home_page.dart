@@ -12,41 +12,41 @@ class AdminHomePage extends StatelessWidget {
     final currentUser = userProvider.userModel;
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppTheme.backgroundWhite,
 
       // APP BAR
       appBar: AppBar(
         foregroundColor: Colors.white,
-        title: const Text(
-          'Admin Home Page',
-        ),
+        title: const Text('Admin Home Page'),
       ),
 
       // BODY
-      body: currentUser != null
-          ? Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('User ID: ${currentUser.id}',
-                      style: AppTheme.lightH2TextStyle),
-                  Text('User Email: ${currentUser.email}',
-                      style: AppTheme.lightH2TextStyle),
-                  Text('User Name: ${currentUser.name}',
-                      style: AppTheme.lightH2TextStyle),
-                  Text('User Role: ${currentUser.role}',
-                      style: AppTheme.lightH2TextStyle),
-                ],
-              ),
-            )
-          : const Center(
-              child: Text('No user model detected'),
-            ),
-
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => context.read<UserProvider>().logout(),
-        backgroundColor: Theme.of(context).primaryColor,
-        child: const Icon(Icons.logout),
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            currentUser != null
+                ? Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('User ID: ${currentUser.id}',
+                            style: AppTheme.normalTextGrey),
+                        Text('User Email: ${currentUser.email}',
+                            style: AppTheme.normalTextGrey),
+                        Text('User Name: ${currentUser.firstName}',
+                            style: AppTheme.normalTextGrey),
+                        Text('User Role: ${currentUser.role}',
+                            style: AppTheme.normalTextGrey),
+                      ],
+                    ),
+                  )
+                : const Center(
+                    child: Text('No user model detected'),
+                  ),
+            const SizedBox(height: 100),
+          ],
+        ),
       ),
     );
   }

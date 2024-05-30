@@ -1,7 +1,9 @@
 // ignore_for_file: avoid_print
+import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:pocket_pal/src/models/user_model.dart';
 
@@ -9,6 +11,7 @@ class UserProvider extends ChangeNotifier {
   UserModel? _userModel;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _db = FirebaseFirestore.instance;
+  final FirebaseStorage _storage = FirebaseStorage.instance;
 
   UserModel? get userModel => _userModel;
 
@@ -57,7 +60,16 @@ class UserProvider extends ChangeNotifier {
   }
 
   Future<void> signUp(
-      String email, String password, String name, String role) async {
+    String email,
+    String password,
+    String firstName,
+    String lastName,
+    String phone,
+    String gender,
+    String role,
+    String dateOfBirth,
+    Uint8List? profilePicture,
+  ) async {
     try {
       final UserCredential userCredential =
           await _auth.createUserWithEmailAndPassword(
@@ -65,7 +77,24 @@ class UserProvider extends ChangeNotifier {
         password: password,
       );
       final String userId = userCredential.user!.uid;
-      await addUserDetails(userId, name, email, role);
+      String imageUrl;
+
+      // check if profile picture is null
+      if (profilePicture != null) {
+        imageUrl = await uploadProfilePic('profile_pictures/$userId',
+            profilePicture); // Upload profile picture to Firebase Storage
+      } else {
+        imageUrl = '';
+      }
+
+      // check if role is therapist
+      if (role == 'Therapist') {
+        await addTherapistDetails(userId, email, firstName, lastName, phone,
+            gender, role, dateOfBirth, imageUrl);
+      } else {
+        await addUserDetails(userId, email, firstName, lastName, phone, gender,
+            role, dateOfBirth, imageUrl);
+      }
       await fetchAndSetUserModel();
     } catch (error) {
       print("Error registering user: $error");
@@ -73,16 +102,65 @@ class UserProvider extends ChangeNotifier {
   }
 
   Future<void> addUserDetails(
-      String userId, String name, String email, String role) async {
+    String userId,
+    String email,
+    String firstName,
+    String lastName,
+    String phone,
+    String gender,
+    String role,
+    String dateOfBirth,
+    String imageUrl,
+  ) async {
     final Timestamp now = Timestamp.now();
     await _db.collection('users').doc(userId).set(
       {
         'id': userId,
-        'name': name.trim(),
         'email': email.trim(),
+        'first_name': firstName.trim(),
+        'last_name': lastName.trim(),
+        'profile_picture': imageUrl,
+        'phone': phone.trim(),
+        'gender': gender,
         'role': role,
-        'createdAt': now,
-        'updatedAt': now,
+        'is_banned': false,
+        'date_of_birth': dateOfBirth,
+        'created_at': now,
+        'updated_at': now,
+      },
+    );
+  }
+
+  Future<void> addTherapistDetails(
+    String userId,
+    String email,
+    String firstName,
+    String lastName,
+    String phone,
+    String gender,
+    String role,
+    String dateOfBirth,
+    String imageUrl,
+  ) async {
+    final Timestamp now = Timestamp.now();
+    await _db.collection('users').doc(userId).set(
+      {
+        'id': userId,
+        'email': email.trim(),
+        'first_name': firstName.trim(),
+        'last_name': lastName.trim(),
+        'profile_picture': imageUrl,
+        'phone': phone.trim(),
+        'gender': gender,
+        'role': role,
+        'is_banned': false,
+        'date_of_birth': dateOfBirth,
+        'created_at': now,
+        'updated_at': now,
+        'education': '',
+        'specialization': '',
+        'is_approved': false,
+        'is_submitted': false,
       },
     );
   }
@@ -94,5 +172,13 @@ class UserProvider extends ChangeNotifier {
       UserModel userModel = UserModel.fromDocument(userDoc);
       setUser(userModel);
     }
+  }
+
+  Future<String> uploadProfilePic(String childName, Uint8List file) async {
+    Reference ref = _storage.ref().child(childName);
+    UploadTask uploadTask = ref.putData(file);
+    TaskSnapshot snapshot = await uploadTask;
+    String downloadUrl = await snapshot.ref.getDownloadURL();
+    return downloadUrl;
   }
 }

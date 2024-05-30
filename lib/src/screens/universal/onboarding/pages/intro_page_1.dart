@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pocket_pal/theme/app_theme.dart';
 
 class IntroPage1 extends StatelessWidget {
   const IntroPage1({super.key});
@@ -6,51 +7,45 @@ class IntroPage1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            const SizedBox(height: 60),
-
-            // Thumbnail
-            Center(
-              child: SizedBox(
-                height: 300,
-                width: 300,
-                child: Image.asset('lib/src/assets/images/onboarding_1.png'),
+      backgroundColor: Colors.transparent,
+      body: SingleChildScrollView(
+        child: SafeArea(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const SizedBox(height: 100),
+              Container(
+                width: double.infinity,
+                child: Image.asset('lib/src/assets/images/onboardingpage1.png'),
               ),
-            ),
-
-            // Title
-            const Padding(
-              padding: EdgeInsets.fromLTRB(40, 50, 40, 0),
-              child: Text(
-                'Therapy made easy and accessible',
-                style: TextStyle(
-                  fontFamily: 'Overpass',
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                  height: 1.2,
+              const SizedBox(height: 40),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Wellness is just ",
+                    style: AppTheme.onboardingTextH1,
+                  ),
+                  Text(
+                    "one",
+                    style: AppTheme.onboardingTextS1,
+                  ),
+                  Text(
+                    " step away",
+                    style: AppTheme.onboardingTextH1,
+                  ),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 50.0),
+                child: Text(
+                  "Don't let anything stop you from achieving your inner peace.",
+                  style: AppTheme.onboardingTextB1,
+                  textAlign: TextAlign.center,
                 ),
-                textAlign: TextAlign.left,
               ),
-            ),
-
-            // Description
-            const Padding(
-              padding: EdgeInsets.fromLTRB(40, 10, 40, 0),
-              child: Text(
-                "Pocket Pal brings therapy to your fingertips by connecting you with world-class counsellors and therapists.",
-                style: TextStyle(
-                  fontFamily: 'Nunito',
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  height: 1.5,
-                ),
-                textAlign: TextAlign.left,
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

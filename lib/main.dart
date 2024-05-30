@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:pocket_pal/src/auth/main_page.dart';
 import 'package:pocket_pal/src/constants/secrets.dart';
+import 'package:pocket_pal/src/screens/universal/onboarding/onboarding.dart';
 import 'package:pocket_pal/theme/app_theme.dart';
 import 'package:provider/provider.dart';
 import 'package:pocket_pal/routes.dart';
@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Pocket Pal',
         theme: AppTheme.lightTheme,
-        home: const MainPage(),
+        home: const OnboardingPage(),
         routes: Routes.routes,
       ),
     );
