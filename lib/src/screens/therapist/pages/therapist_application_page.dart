@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:file_picker/file_picker.dart';
-
-import '../../../providers/therapist/application_provider.dart';
+import 'package:pocket_pal/src/providers/therapist/therapist_application_provider.dart';
+import 'package:pocket_pal/theme/app_theme.dart';
 
 class TherapistApplicationPage extends StatefulWidget {
   final String therapistId;
@@ -15,10 +15,8 @@ class TherapistApplicationPage extends StatefulWidget {
 
 class _TherapistApplicationPageState extends State<TherapistApplicationPage> {
   final _formKey = GlobalKey<FormState>();
-
-  final _emailController = TextEditingController();
-  final _specializationController = TextEditingController();
   final _stateOfLicensureController = TextEditingController(text: 'Selangor'); // Hardcoded for now
+  String? _specialization;
   String? _resumeFileName;
   PlatformFile? _resumeFile;
   List<PlatformFile> _licenseFiles = [];
@@ -26,8 +24,6 @@ class _TherapistApplicationPageState extends State<TherapistApplicationPage> {
 
   @override
   void dispose() {
-    _emailController.dispose();
-    _specializationController.dispose();
     _stateOfLicensureController.dispose();
     super.dispose();
   }
@@ -62,10 +58,9 @@ class _TherapistApplicationPageState extends State<TherapistApplicationPage> {
 
   Future<void> _submitApplication() async {
     if (_formKey.currentState!.validate()) {
-      await context.read<ApplicationProvider>().submitApplication(
+      await context.read<TherapistApplicationProvider>().submitApplication(
         therapistId: widget.therapistId,
-        email: _emailController.text,
-        specialization: _specializationController.text,
+        specialization: _specialization!,
         stateOfLicensure: _stateOfLicensureController.text,
         resumeFile: _resumeFile!,
         licenseFiles: _licenseFiles,
@@ -94,8 +89,8 @@ class _TherapistApplicationPageState extends State<TherapistApplicationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Therapist Registration'),
-        backgroundColor: Colors.green,
+        title: Text('Therapist Application'),
+        backgroundColor: AppTheme.primaryGreen,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -103,36 +98,26 @@ class _TherapistApplicationPageState extends State<TherapistApplicationPage> {
           key: _formKey,
           child: ListView(
             children: [
-              TextFormField(
-                controller: _emailController,
-                decoration: InputDecoration(labelText: 'Email'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your email';
-                  }
-                  return null;
+              const SizedBox(height: 20),
+              _buildDropdownField(
+                label: 'Specialization',
+                value: _specialization,
+                items: ['Psychology', 'Therapy', 'Counseling', 'Psychiatry'],
+                onChanged: (value) {
+                  setState(() {
+                    _specialization = value;
+                  });
                 },
               ),
-              TextFormField(
-                controller: _specializationController,
-                decoration: InputDecoration(labelText: 'Specialization'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your specialization';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
+              const SizedBox(height: 20),
+              _buildTextField(
                 controller: _stateOfLicensureController,
-                decoration: InputDecoration(labelText: 'State of Licensure'),
-                enabled: false, // Disabled for now, hardcoded value
+                label: 'State of Licensure',
+                hintText: 'Selangor',
+                enabled: false,
               ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () => _pickFile('resume'),
-                child: Text(_resumeFileName == null ? 'Upload Resume' : _resumeFileName!),
-              ),
+              const SizedBox(height: 20),
+              _buildFilePickerButton('Upload Resume', 'resume', AppTheme.primaryGreen),
               if (_resumeFileName != null)
                 ListTile(
                   title: Text(_resumeFileName!),
@@ -141,13 +126,8 @@ class _TherapistApplicationPageState extends State<TherapistApplicationPage> {
                     onPressed: () => _removeFile('resume', 0),
                   ),
                 ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () => _pickFile('license'),
-                child: Text(_licenseFileNames.isEmpty
-                    ? 'Upload Licenses'
-                    : 'Uploaded ${_licenseFileNames.length} License(s)'),
-              ),
+              const SizedBox(height: 20),
+              _buildFilePickerButton('Upload Licenses', 'license', AppTheme.primaryGreen),
               ..._licenseFileNames.asMap().entries.map((entry) {
                 int index = entry.key;
                 String fileName = entry.value;
@@ -159,14 +139,132 @@ class _TherapistApplicationPageState extends State<TherapistApplicationPage> {
                   ),
                 );
               }).toList(),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _submitApplication,
-                child: Text('Submit Application'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppTheme.primaryOrange,
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ),
+                child: Text(
+                  'Submit',
+                  style: AppTheme.onboardingButtonText,
+                ),
               ),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildDropdownField({
+    required String label,
+    required String? value,
+    required List<String> items,
+    required ValueChanged<String?> onChanged,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: AppTheme.mediumTextGreen,
+        ),
+        const SizedBox(height: 8),
+        DropdownButtonFormField<String>(
+          value: value,
+          items: items.map((item) {
+            return DropdownMenuItem(
+              value: item,
+              child: Text(item),
+            );
+          }).toList(),
+          onChanged: onChanged,
+          decoration: InputDecoration(
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: AppTheme.primaryGreen),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: AppTheme.primaryGreen),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.red),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.red),
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+          validator: (value) => value == null ? 'Please select a specialization' : null,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String label,
+    required String hintText,
+    bool enabled = true,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: AppTheme.mediumTextGreen,
+        ),
+        const SizedBox(height: 8),
+        TextFormField(
+          controller: controller,
+          decoration: InputDecoration(
+            hintText: hintText,
+            hintStyle: AppTheme.textFieldHint1,
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: AppTheme.primaryGreen),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: AppTheme.primaryGreen),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            disabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: AppTheme.primaryGreen),
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+          enabled: enabled,
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please enter $label';
+            }
+            return null;
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildFilePickerButton(String text, String fileType, Color backgroundColor) {
+    return ElevatedButton(
+      onPressed: () => _pickFile(fileType),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: backgroundColor,
+        padding: const EdgeInsets.symmetric(vertical: 16.0),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+      ),
+      child: Text(
+        text,
+        style: AppTheme.onboardingButtonText,
       ),
     );
   }
