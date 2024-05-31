@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:pocket_pal/src/providers/therapist/application_provider.dart';
 import 'package:pocket_pal/theme/app_theme.dart';
+import 'package:pocket_pal/src/enums/specialization.dart';
 
 class TherapistApplicationPage extends StatefulWidget {
   final String therapistId;
@@ -16,7 +17,7 @@ class TherapistApplicationPage extends StatefulWidget {
 class _TherapistApplicationPageState extends State<TherapistApplicationPage> {
   final _formKey = GlobalKey<FormState>();
   final _stateOfLicensureController = TextEditingController(text: 'Selangor'); // Hardcoded for now
-  String? _specialization;
+  Specialization? _specialization;
   String? _resumeFileName;
   PlatformFile? _resumeFile;
   List<PlatformFile> _licenseFiles = [];
@@ -60,7 +61,7 @@ class _TherapistApplicationPageState extends State<TherapistApplicationPage> {
     if (_formKey.currentState!.validate()) {
       await context.read<ApplicationProvider>().submitApplication(
         therapistId: widget.therapistId,
-        specialization: _specialization!,
+        specialization: _specialization!.displayName,
         stateOfLicensure: _stateOfLicensureController.text,
         resumeFile: _resumeFile!,
         licenseFiles: _licenseFiles,
@@ -102,10 +103,10 @@ class _TherapistApplicationPageState extends State<TherapistApplicationPage> {
               _buildDropdownField(
                 label: 'Specialization',
                 value: _specialization,
-                items: ['Psychology', 'Therapy', 'Counseling', 'Psychiatry'],
+                items: Specialization.values.map((specialization) => specialization.displayName).toList(),
                 onChanged: (value) {
                   setState(() {
-                    _specialization = value;
+                    _specialization = Specialization.values.firstWhere((specialization) => specialization.displayName == value);
                   });
                 },
               ),
@@ -163,7 +164,7 @@ class _TherapistApplicationPageState extends State<TherapistApplicationPage> {
 
   Widget _buildDropdownField({
     required String label,
-    required String? value,
+    required Specialization? value,
     required List<String> items,
     required ValueChanged<String?> onChanged,
   }) {
@@ -176,7 +177,7 @@ class _TherapistApplicationPageState extends State<TherapistApplicationPage> {
         ),
         const SizedBox(height: 8),
         DropdownButtonFormField<String>(
-          value: value,
+          value: value?.displayName,
           items: items.map((item) {
             return DropdownMenuItem(
               value: item,
