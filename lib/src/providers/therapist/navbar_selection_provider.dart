@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class TherapistNavBarSelectionProvider extends ChangeNotifier {
+class NavBarSelectionProvider extends ChangeNotifier {
   int _selectedIndex = 0;
 
   int get selectedIndex => _selectedIndex;
