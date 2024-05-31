@@ -26,8 +26,8 @@ class Providers {
     ChangeNotifierProvider<RoleProvider>(
       create: (_) => RoleProvider(),
     ),
-    ChangeNotifierProvider<NavBarSelectionProvider>(
-      create: (_) => NavBarSelectionProvider(),
+    ChangeNotifierProvider<NavbarSelectionProvider>(
+      create: (_) => NavbarSelectionProvider(),
     ),
     ChangeNotifierProvider<ApplicationProvider>(
       create: (_) => ApplicationProvider(),

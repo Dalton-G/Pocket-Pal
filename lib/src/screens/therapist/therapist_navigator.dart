@@ -11,7 +11,7 @@ class TherapistNavigator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<NavBarSelectionProvider>(context);
+    final provider = Provider.of<NavbarSelectionProvider>(context);
 
     final PageController pageController =
     PageController(initialPage: provider.selectedIndex);
