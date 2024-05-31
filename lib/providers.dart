@@ -1,10 +1,12 @@
 import 'package:pocket_pal/src/providers/auth_provider.dart';
 import 'package:pocket_pal/src/providers/role_provider.dart';
-import 'package:pocket_pal/src/providers/therapist/therapist_navbar_selection_provider.dart';
+import 'package:pocket_pal/src/providers/therapist/application_provider.dart';
+import 'package:pocket_pal/src/providers/therapist/navbar_selection_provider.dart';
 import 'package:pocket_pal/src/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:pocket_pal/src/providers/onboarding_page_provider.dart';
 import 'package:pocket_pal/src/providers/member_navbar_selection_provider.dart';
+
 
 class Providers {
   Providers._();
@@ -23,8 +25,12 @@ class Providers {
     ),
     ChangeNotifierProvider<RoleProvider>(
       create: (_) => RoleProvider(),
-    ),    ChangeNotifierProvider<TherapistNavBarSelectionProvider>(
-      create: (_) => TherapistNavBarSelectionProvider(),
+    ),
+    ChangeNotifierProvider<NavBarSelectionProvider>(
+      create: (_) => NavBarSelectionProvider(),
+    ),
+    ChangeNotifierProvider<ApplicationProvider>(
+      create: (_) => ApplicationProvider(),
     ),
   ].toList();
 }
