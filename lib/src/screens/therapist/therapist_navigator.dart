@@ -2,17 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:pocket_pal/src/screens/therapist/pages/therapist_home_page.dart';
 import 'package:pocket_pal/src/screens/therapist/pages/therapist_schedule_page.dart';
+import 'package:pocket_pal/src/providers/therapist/navbar_selection_provider.dart';
+import 'package:pocket_pal/src/widgets/navbar/g_navbar_enhanced.dart';
 import 'package:provider/provider.dart';
-
-import '../../providers/therapist/therapist_navbar_selection_provider.dart';
-import '../../widgets/navbar/g_navbar_enhanced.dart';
 
 class TherapistNavigator extends StatelessWidget {
   const TherapistNavigator({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<TherapistNavBarSelectionProvider>(context);
+    final provider = Provider.of<NavBarSelectionProvider>(context);
 
     final PageController pageController =
     PageController(initialPage: provider.selectedIndex);
