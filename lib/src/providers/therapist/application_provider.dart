@@ -19,7 +19,6 @@ class ApplicationProvider extends ChangeNotifier {
 
   Future<void> submitApplication({
     required String therapistId,
-    required String email,
     required String specialization,
     required String stateOfLicensure,
     required PlatformFile resumeFile,
@@ -55,6 +54,12 @@ class ApplicationProvider extends ChangeNotifier {
       'licenseUrls': application.licenseUrls,
       'createdAt': FieldValue.serverTimestamp(),
       'updatedAt': FieldValue.serverTimestamp(),
+    });
+
+    // Update the user's document to set is_submitted to true
+    await _db.collection('users').doc(therapistId).update({
+      'is_submitted': true,
+      'updated_at': FieldValue.serverTimestamp(),
     });
 
     notifyListeners();
