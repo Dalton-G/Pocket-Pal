@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:pocket_pal/src/providers/therapist/therapist_application_provider.dart';
+import 'package:pocket_pal/src/providers/therapist/application_provider.dart';
 import 'package:pocket_pal/theme/app_theme.dart';
 
 class TherapistApplicationPage extends StatefulWidget {
@@ -58,7 +58,7 @@ class _TherapistApplicationPageState extends State<TherapistApplicationPage> {
 
   Future<void> _submitApplication() async {
     if (_formKey.currentState!.validate()) {
-      await context.read<TherapistApplicationProvider>().submitApplication(
+      await context.read<ApplicationProvider>().submitApplication(
         therapistId: widget.therapistId,
         specialization: _specialization!,
         stateOfLicensure: _stateOfLicensureController.text,
