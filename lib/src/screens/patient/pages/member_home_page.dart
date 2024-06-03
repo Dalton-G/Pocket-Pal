@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pocket_pal/src/providers/user_provider.dart';
+import 'package:pocket_pal/src/providers/auth/user_provider.dart';
 import 'package:pocket_pal/theme/app_theme.dart';
 import 'package:provider/provider.dart';
 

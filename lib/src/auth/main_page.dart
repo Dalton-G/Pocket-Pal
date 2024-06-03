@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:pocket_pal/src/auth/auth_page.dart';
-import 'package:pocket_pal/src/models/user_model.dart';
+import 'package:pocket_pal/src/models/auth/user_model.dart';
 import 'package:pocket_pal/src/screens/admin/pages/admin_navigator.dart';
 import 'package:pocket_pal/src/screens/patient/member_navigator.dart';
 import 'package:pocket_pal/src/screens/therapist/pages/therapist_home_page.dart';
 import 'package:provider/provider.dart';
-import 'package:pocket_pal/src/providers/user_provider.dart';
+import 'package:pocket_pal/src/providers/auth/user_provider.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});

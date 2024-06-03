@@ -1,8 +1,0 @@
--- screens --
-
-The screens folder holds many different folders, 
-each of which corresponds to a different screen of the app. 
-Each screen folder holds two things: 
-a primary screen file and widgets 
-which would be used only inside a particular screen 
-should be placed inside that screen and not inside the common widgets folder.

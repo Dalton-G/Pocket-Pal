@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pocket_pal/src/providers/user_provider.dart';
+import 'package:pocket_pal/src/providers/auth/user_provider.dart';
 import 'package:provider/provider.dart';
 
 class TherapistHomePage extends StatelessWidget {

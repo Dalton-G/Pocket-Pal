@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:pocket_pal/src/providers/member_navbar_selection_provider.dart';
-import 'package:pocket_pal/src/providers/user_provider.dart';
+import 'package:pocket_pal/src/providers/admin/nav/admin_navbar_provider.dart';
 import 'package:pocket_pal/src/screens/admin/pages/admin_home_page.dart';
 import 'package:pocket_pal/src/widgets/navbar/g_navbar_enhanced.dart';
 import 'package:provider/provider.dart';
@@ -11,7 +10,7 @@ class AdminNavigator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<MemberNavBarSelectionProvider>(context);
+    final provider = Provider.of<AdminNavbarProvider>(context);
 
     final PageController pageController =
         PageController(initialPage: provider.selectedIndex);
@@ -104,14 +103,6 @@ class AdminNavigator extends StatelessWidget {
             ),
           ),
         ],
-      ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 80.0),
-        child: FloatingActionButton(
-          onPressed: () => context.read<UserProvider>().logout(),
-          backgroundColor: Theme.of(context).primaryColor,
-          child: const Icon(Icons.logout),
-        ),
       ),
     );
   }

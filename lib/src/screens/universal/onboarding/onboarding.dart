@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:pocket_pal/src/screens/universal/onboarding/pages/intro_page_1.dart';
 import 'package:pocket_pal/src/screens/universal/onboarding/pages/intro_page_2.dart';
 import 'package:pocket_pal/src/screens/universal/onboarding/pages/intro_page_3.dart';
-import 'package:pocket_pal/src/providers/onboarding_page_provider.dart';
+import 'package:pocket_pal/src/providers/onboarding/onboarding_page_provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class OnboardingPage extends StatelessWidget {

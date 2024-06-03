@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pocket_pal/src/auth/login_page.dart';
 import 'package:pocket_pal/src/auth/register_page.dart';
-import 'package:pocket_pal/src/providers/auth_provider.dart';
+import 'package:pocket_pal/src/providers/auth/auth_provider.dart';
 import 'package:provider/provider.dart';
 
 class AuthPage extends StatelessWidget {

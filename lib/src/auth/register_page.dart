@@ -4,8 +4,8 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:pocket_pal/src/providers/user_provider.dart';
-import 'package:pocket_pal/src/utils/pick_image.dart';
+import 'package:pocket_pal/src/providers/auth/user_provider.dart';
+import 'package:pocket_pal/src/utils/admin/pick_image.dart';
 import 'package:pocket_pal/src/widgets/auth/alertDialog.dart';
 import 'package:pocket_pal/src/widgets/auth/authButton.dart';
 import 'package:pocket_pal/src/widgets/auth/avatarAdd.dart';
