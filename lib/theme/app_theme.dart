@@ -149,6 +149,12 @@ class AppTheme {
     fontFamily: 'Nunito',
     fontWeight: FontWeight.w600,
   );
+  static const TextStyle boldTextGreen = TextStyle(
+    fontSize: 16.0,
+    color: primaryGreen,
+    fontFamily: 'Nunito',
+    fontWeight: FontWeight.bold,
+  );
 
   // Onboarding Page Styles
   static const TextStyle onboardingTextH1 = TextStyle(
@@ -202,6 +208,21 @@ class AppTheme {
   static const BoxDecoration lightGreenBorder = BoxDecoration(
     color: secondaryGreen,
     borderRadius: BorderRadius.all(Radius.circular(10)),
+  );
+
+  // Forun
+  static InputDecoration categoryDropdownMenu = InputDecoration(
+    fillColor: AppTheme.secondaryGreen,
+    filled: true,
+    prefixIcon: Icon(Icons.list, color: AppTheme.primaryGreen),
+    enabledBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: AppTheme.secondaryGreen),
+      borderRadius: BorderRadius.circular(10),
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: AppTheme.secondaryGreen),
+      borderRadius: BorderRadius.circular(10),
+    ),
   );
 
   // static final ThemeData darkTheme = ThemeData(
