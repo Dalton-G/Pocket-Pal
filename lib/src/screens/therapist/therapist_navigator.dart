@@ -3,6 +3,7 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:pocket_pal/src/screens/therapist/pages/therapist_home_page.dart';
 import 'package:pocket_pal/src/screens/therapist/pages/therapist_schedule_page.dart';
 import 'package:pocket_pal/src/providers/therapist/navbar_selection_provider.dart';
+import 'package:pocket_pal/src/screens/therapist/pages/therapist_session_page.dart';
 import 'package:pocket_pal/src/widgets/navbar/g_navbar_enhanced.dart';
 import 'package:provider/provider.dart';
 
@@ -28,6 +29,7 @@ class TherapistNavigator extends StatelessWidget {
             children: const [
               TherapistHomePage(),
               TherapistSchedulePage(),
+              TherapistSessionPage(),
             ],
           ),
           Positioned(
@@ -53,8 +55,8 @@ class TherapistNavigator extends StatelessWidget {
                 ),
                 GButton(
                   icon: provider.selectedIndex == 1
-                      ? Icons.calendar_month
-                      : Icons.calendar_month_outlined,
+                      ? Icons.schedule
+                      : Icons.schedule_outlined,
                   text: 'Schedule',
                   textStyle: const TextStyle(
                     color: Colors.white,
@@ -68,9 +70,9 @@ class TherapistNavigator extends StatelessWidget {
                 ),
                 GButton(
                   icon: provider.selectedIndex == 2
-                      ? Icons.forum
-                      : Icons.forum_outlined,
-                  text: 'Chat',
+                      ? Icons.calendar_month
+                      : Icons.calendar_month_outlined,
+                  text: 'Session',
                   textStyle: const TextStyle(
                     color: Colors.white,
                     fontFamily: 'Nunito',
@@ -83,6 +85,21 @@ class TherapistNavigator extends StatelessWidget {
                 ),
                 GButton(
                   icon: provider.selectedIndex == 3
+                      ? Icons.forum
+                      : Icons.forum_outlined,
+                  text: 'Chat',
+                  textStyle: const TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'Nunito',
+                    fontWeight: FontWeight.bold,
+                  ),
+                  onPressed: () {
+                    provider.setSelectedIndex(3);
+                    pageController.jumpToPage(3);
+                  },
+                ),
+                GButton(
+                  icon: provider.selectedIndex == 4
                       ? Icons.group
                       : Icons.group_outlined,
                   text: 'Forum',
@@ -92,8 +109,8 @@ class TherapistNavigator extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                   onPressed: () {
-                    provider.setSelectedIndex(3);
-                    pageController.jumpToPage(3);
+                    provider.setSelectedIndex(4);
+                    pageController.jumpToPage(4);
                   },
                 ),
               ],
