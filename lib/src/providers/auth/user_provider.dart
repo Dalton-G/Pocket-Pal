@@ -181,4 +181,28 @@ class UserProvider extends ChangeNotifier {
     String downloadUrl = await snapshot.ref.getDownloadURL();
     return downloadUrl;
   }
+
+  Future<void> updateUserProfile({
+    required String userId,
+    required String firstName,
+    required String lastName,
+    required String phone,
+    required String dateOfBirth,
+    required Uint8List profilePicture,
+  }) async {
+    String imageUrl = await uploadProfilePic('profile_pictures/$userId',
+        profilePicture); // Upload profile picture to Firebase Storage
+    final Timestamp now = Timestamp.now();
+    await _db.collection('users').doc(userId).update(
+      {
+        'first_name': firstName.trim(),
+        'last_name': lastName.trim(),
+        'profile_picture': imageUrl,
+        'phone': phone.trim(),
+        'date_of_birth': dateOfBirth,
+        'updated_at': now,
+      },
+    );
+    await fetchAndSetUserModel();
+  }
 }

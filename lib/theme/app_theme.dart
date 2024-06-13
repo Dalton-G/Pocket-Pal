@@ -179,6 +179,11 @@ class AppTheme {
     color: primaryGreen,
     borderRadius: BorderRadius.all(Radius.circular(10)),
   );
+  static BoxDecoration onboardingButtonOutline = BoxDecoration(
+    color: Colors.transparent,
+    borderRadius: BorderRadius.all(Radius.circular(10)),
+    border: Border.all(color: primaryGreen, width: 2),
+  );
   static const TextStyle onboardingButtonText = TextStyle(
     fontSize: 16.0,
     color: white,

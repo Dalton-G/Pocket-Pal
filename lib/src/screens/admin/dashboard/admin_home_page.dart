@@ -19,14 +19,27 @@ class AdminHomePage extends StatelessWidget {
 
       // APP BAR
       appBar: AppBar(
-        title: const Text('Admin Home Page'),
-        automaticallyImplyLeading: false,
-        actions: [
-          IconButton(
-              icon: const Icon(Icons.logout),
-              onPressed: () => context.read<UserProvider>().logout()),
-        ],
-      ),
+          title: const Text('Admin Home Page'),
+          automaticallyImplyLeading: false,
+          actions: [
+            currentUser?.profilePicture != null
+                ? GestureDetector(
+                    onTap: () => Navigator.pushNamed(
+                        context, '/admin-edit-profile-page'),
+                    child: CircleAvatar(
+                      radius: 20,
+                      backgroundImage:
+                          NetworkImage(currentUser!.profilePicture),
+                    ),
+                  )
+                : CircleAvatar(
+                    radius: 20,
+                    backgroundImage:
+                        AssetImage('lib/src/assets/images/avatar.png')
+                            as ImageProvider,
+                  ),
+            const SizedBox(width: 10),
+          ]),
 
       // BODY
       body: SingleChildScrollView(
