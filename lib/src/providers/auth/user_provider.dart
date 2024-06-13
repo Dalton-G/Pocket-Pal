@@ -79,10 +79,9 @@ class UserProvider extends ChangeNotifier {
       final String userId = userCredential.user!.uid;
       String imageUrl;
 
-      // check if profile picture is null
       if (profilePicture != null) {
-        imageUrl = await uploadProfilePic('profile_pictures/$userId',
-            profilePicture); // Upload profile picture to Firebase Storage
+        imageUrl =
+            await uploadProfilePic('profile_pictures/$userId', profilePicture);
       } else {
         imageUrl = '';
       }
@@ -96,6 +95,40 @@ class UserProvider extends ChangeNotifier {
             role, dateOfBirth, imageUrl);
       }
       await fetchAndSetUserModel();
+    } catch (error) {
+      print("Error registering user: $error");
+    }
+  }
+
+  Future<void> createAdminAcc(
+    String email,
+    String password,
+    String firstName,
+    String lastName,
+    String phone,
+    String gender,
+    String role,
+    String dateOfBirth,
+    Uint8List? profilePicture,
+  ) async {
+    try {
+      final UserCredential userCredential =
+          await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      final String userId = userCredential.user!.uid;
+      String imageUrl;
+
+      if (profilePicture != null) {
+        imageUrl =
+            await uploadProfilePic('profile_pictures/$userId', profilePicture);
+      } else {
+        imageUrl = '';
+      }
+
+      addUserDetails(userId, email, firstName, lastName, phone, gender, role,
+          dateOfBirth, imageUrl);
     } catch (error) {
       print("Error registering user: $error");
     }

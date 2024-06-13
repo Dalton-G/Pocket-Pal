@@ -20,6 +20,7 @@ class AppTheme {
 
   static const backgroundWhite = Color(0XFFFDF9F9);
   static const slateGrey = Color(0XFF27344F);
+  static const lightRed = Color(0XFF990000);
 
   static final ThemeData lightTheme = ThemeData(
     scaffoldBackgroundColor: white,
@@ -125,6 +126,12 @@ class AppTheme {
     fontFamily: 'Nunito',
     fontWeight: FontWeight.bold,
   );
+  static const TextStyle mediumTextGrey = TextStyle(
+    fontSize: 24.0,
+    color: slateGrey,
+    fontFamily: 'Nunito',
+    fontWeight: FontWeight.bold,
+  );
   static const TextStyle normalTextGrey = TextStyle(
     fontSize: 16.0,
     color: slateGrey,
@@ -152,6 +159,12 @@ class AppTheme {
   static const TextStyle smallTextGrey = TextStyle(
     fontSize: 14.0,
     color: slateGrey,
+    fontFamily: 'Nunito',
+    fontWeight: FontWeight.w600,
+  );
+  static const TextStyle smallTextWhite = TextStyle(
+    fontSize: 14.0,
+    color: backgroundWhite,
     fontFamily: 'Nunito',
     fontWeight: FontWeight.w600,
   );
@@ -183,6 +196,10 @@ class AppTheme {
   );
   static const BoxDecoration onboardingButton = BoxDecoration(
     color: primaryGreen,
+    borderRadius: BorderRadius.all(Radius.circular(10)),
+  );
+  static const BoxDecoration banButton = BoxDecoration(
+    color: lightRed,
     borderRadius: BorderRadius.all(Radius.circular(10)),
   );
   static BoxDecoration onboardingButtonOutline = BoxDecoration(

@@ -147,13 +147,13 @@ class AdminHomePage extends StatelessWidget {
                           padding: const EdgeInsets.all(10),
                           child: PieChart(
                             PieChartData(
-                              centerSpaceRadius: 40,
+                              centerSpaceRadius: 30,
                               sections: [
                                 PieChartSectionData(
                                   color: AppTheme.primaryBlue,
                                   value: userCounts['Admins']!.toDouble(),
                                   title: "Admins (${userCounts['Admins']})",
-                                  titlePositionPercentageOffset: 2,
+                                  titlePositionPercentageOffset: 1.8,
                                   titleStyle: AppTheme.smallTextGrey,
                                 ),
                                 PieChartSectionData(
@@ -161,14 +161,14 @@ class AdminHomePage extends StatelessWidget {
                                   value: userCounts['Therapists']!.toDouble(),
                                   title:
                                       "Therapists (${userCounts['Therapists']})",
-                                  titlePositionPercentageOffset: 1.6,
+                                  titlePositionPercentageOffset: 2.1,
                                   titleStyle: AppTheme.smallTextGrey,
                                 ),
                                 PieChartSectionData(
                                   color: AppTheme.primaryOrange,
                                   value: userCounts['Members']!.toDouble(),
                                   title: "Members (${userCounts['Members']})",
-                                  titlePositionPercentageOffset: 1.6,
+                                  titlePositionPercentageOffset: 2.1,
                                   titleStyle: AppTheme.smallTextGrey,
                                 ),
                               ],

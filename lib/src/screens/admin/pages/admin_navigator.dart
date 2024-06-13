@@ -6,6 +6,7 @@ import 'package:pocket_pal/src/screens/admin/manage_application/admin_manage_app
 import 'package:pocket_pal/src/screens/admin/manage_forum/admin_manage_forum_page.dart';
 import 'package:pocket_pal/src/screens/admin/manage_user/admin_manage_user_page.dart';
 import 'package:pocket_pal/src/widgets/navbar/g_navbar_enhanced.dart';
+import 'package:pocket_pal/theme/app_theme.dart';
 import 'package:provider/provider.dart';
 
 class AdminNavigator extends StatelessWidget {
@@ -19,7 +20,8 @@ class AdminNavigator extends StatelessWidget {
         PageController(initialPage: provider.selectedIndex);
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      resizeToAvoidBottomInset: false,
+      backgroundColor: AppTheme.backgroundWhite,
       body: Stack(
         children: [
           PageView(
