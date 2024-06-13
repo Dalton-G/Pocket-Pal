@@ -137,6 +137,12 @@ class AppTheme {
     fontFamily: 'Nunito',
     fontWeight: FontWeight.w600,
   );
+  static const TextStyle normalTextGreen = TextStyle(
+    fontSize: 16.0,
+    color: primaryGreen,
+    fontFamily: 'Nunito',
+    fontWeight: FontWeight.w600,
+  );
   static const TextStyle smallTextGreen = TextStyle(
     fontSize: 14.0,
     color: primaryGreen,

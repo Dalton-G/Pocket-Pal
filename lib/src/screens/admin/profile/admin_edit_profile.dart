@@ -147,7 +147,7 @@ class _AdminEditProfilePageState extends State<AdminEditProfilePage> {
                   ),
                   const SizedBox(height: 30),
                   Row(children: [
-                    Text("View ", style: AppTheme.largeTextGreen2),
+                    Text("Edit ", style: AppTheme.largeTextGreen2),
                     Text("Profile", style: AppTheme.largeTextGrey2),
                   ]),
                   SizedBox(height: screenHeight * 0.04),

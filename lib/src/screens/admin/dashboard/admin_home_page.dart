@@ -1,5 +1,7 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:pocket_pal/src/providers/auth/user_provider.dart';
+import 'package:pocket_pal/src/utils/admin/get_data.dart';
 import 'package:pocket_pal/theme/app_theme.dart';
 import 'package:provider/provider.dart';
 
@@ -19,7 +21,7 @@ class AdminHomePage extends StatelessWidget {
 
       // APP BAR
       appBar: AppBar(
-          title: const Text('Admin Home Page'),
+          title: const Text('Admin Dashboard'),
           automaticallyImplyLeading: false,
           actions: [
             currentUser?.profilePicture != null
@@ -44,49 +46,169 @@ class AdminHomePage extends StatelessWidget {
       // BODY
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 35.0, vertical: 20.0),
-          child: Container(
-            constraints: BoxConstraints(
-                minHeight: screenHeight * 0.8, minWidth: screenWidth),
+          padding: EdgeInsets.symmetric(
+              horizontal: screenWidth * 0.05, vertical: screenHeight * 0.03),
+          child: Center(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  'ID: ${currentUser?.id}',
+                  "Welcome back, ",
                   style: AppTheme.normalTextGrey,
                 ),
                 Text(
-                  'First Name: ${currentUser?.firstName}',
-                  style: AppTheme.normalTextGrey,
+                  "${currentUser?.firstName} ${currentUser?.lastName}",
+                  style: AppTheme.mediumTextGreen,
                 ),
-                Text(
-                  'Last Name: ${currentUser?.lastName}',
-                  style: AppTheme.normalTextGrey,
+                const SizedBox(height: 20),
+                GridView.count(
+                  shrinkWrap: true,
+                  crossAxisCount: 2,
+                  childAspectRatio: 1.5,
+                  children: [
+                    FutureBuilder<int>(
+                      future: getTotalUsers('Member'),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return GridItem(
+                            title: "Total Members",
+                            count: snapshot.data!,
+                          );
+                        } else if (snapshot.hasError) {
+                          return Text('Error: ${snapshot.error}');
+                        } else {
+                          return const CircularProgressIndicator();
+                        }
+                      },
+                    ),
+                    FutureBuilder<int>(
+                      future: getTotalUsers('Therapist'),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return GridItem(
+                            title: "Total Therapists",
+                            count: snapshot.data!,
+                          );
+                        } else if (snapshot.hasError) {
+                          return Text('Error: ${snapshot.error}');
+                        } else {
+                          return const CircularProgressIndicator();
+                        }
+                      },
+                    ),
+                    FutureBuilder<int>(
+                      future: getTotalBookings(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return GridItem(
+                            title: "Total Bookings",
+                            count: snapshot.data!,
+                          );
+                        } else if (snapshot.hasError) {
+                          return Text('Error: ${snapshot.error}');
+                        } else {
+                          return const CircularProgressIndicator();
+                        }
+                      },
+                    ),
+                    FutureBuilder<int>(
+                      future: getTotalPosts(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return GridItem(
+                            title: "Total Posts",
+                            count: snapshot.data!,
+                          );
+                        } else if (snapshot.hasError) {
+                          return Text('Error: ${snapshot.error}');
+                        } else {
+                          return const CircularProgressIndicator();
+                        }
+                      },
+                    ),
+                  ],
                 ),
-                Text(
-                  'Gender: ${currentUser?.gender}',
-                  style: AppTheme.normalTextGrey,
-                ),
-                Text(
-                  'Email: ${currentUser?.email}',
-                  style: AppTheme.normalTextGrey,
-                ),
-                Text(
-                  'Phone: ${currentUser?.phone}',
-                  style: AppTheme.normalTextGrey,
-                ),
-                Text(
-                  'Role: ${currentUser?.role}',
-                  style: AppTheme.normalTextGrey,
-                ),
-                Text(
-                  'Date of Birth: ${currentUser?.dateOfBirth}',
-                  style: AppTheme.normalTextGrey,
+                Divider(color: AppTheme.primaryGreen),
+                Text("User Distribution Chart", style: AppTheme.normalTextGrey),
+                const SizedBox(height: 10),
+                FutureBuilder<Map<String, int>>(
+                  future: getUserCountsByType(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      final userCounts = snapshot.data!;
+                      return Container(
+                        decoration: BoxDecoration(
+                          color: AppTheme.secondaryGreen,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        height: 250,
+                        width: double.infinity,
+                        child: Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: PieChart(
+                            PieChartData(
+                              centerSpaceRadius: 40,
+                              sections: [
+                                PieChartSectionData(
+                                  color: AppTheme.primaryBlue,
+                                  value: userCounts['Admins']!.toDouble(),
+                                  title: "Admins (${userCounts['Admins']})",
+                                  titlePositionPercentageOffset: 2,
+                                  titleStyle: AppTheme.smallTextGrey,
+                                ),
+                                PieChartSectionData(
+                                  color: AppTheme.primaryGreen,
+                                  value: userCounts['Therapists']!.toDouble(),
+                                  title:
+                                      "Therapists (${userCounts['Therapists']})",
+                                  titlePositionPercentageOffset: 1.6,
+                                  titleStyle: AppTheme.smallTextGrey,
+                                ),
+                                PieChartSectionData(
+                                  color: AppTheme.primaryOrange,
+                                  value: userCounts['Members']!.toDouble(),
+                                  title: "Members (${userCounts['Members']})",
+                                  titlePositionPercentageOffset: 1.6,
+                                  titleStyle: AppTheme.smallTextGrey,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    } else {
+                      return const CircularProgressIndicator();
+                    }
+                  },
                 ),
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class GridItem extends StatelessWidget {
+  final String title;
+  final int count;
+  const GridItem({required this.title, required this.count});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(title, style: AppTheme.normalTextGrey),
+            const SizedBox(height: 5),
+            Text(count.toString(), style: AppTheme.mediumTextGreen),
+          ],
         ),
       ),
     );
