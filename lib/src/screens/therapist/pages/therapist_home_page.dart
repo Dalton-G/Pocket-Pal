@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pocket_pal/src/providers/user_provider.dart';
+import 'package:pocket_pal/src/providers/therapist/booking_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
@@ -12,37 +13,6 @@ class TherapistHomePage extends StatefulWidget {
 
 class _TherapistHomePageState extends State<TherapistHomePage> with SingleTickerProviderStateMixin {
   late TabController _tabController;
-
-  final List<Map<String, dynamic>> sessions = [
-    {
-      'name': 'Sarah Miller',
-      'details': '25 y/o - Depression - Takes meds',
-      'imageUrl': 'https://via.placeholder.com/150',
-      'startTime': DateTime(2024, 5, 18, 9, 0),
-      'endTime': DateTime(2024, 5, 18, 9, 30)
-    },
-    {
-      'name': 'Jill Robbins',
-      'details': '23 y/o - ADHD - No meds',
-      'imageUrl': 'https://via.placeholder.com/150',
-      'startTime': DateTime(2024, 6, 12, 12, 0),
-      'endTime': DateTime(2024, 6, 12, 13, 0)
-    },
-    {
-      'name': 'Tom Stuart',
-      'details': '30 y/o - Anxiety - No meds',
-      'imageUrl': 'https://via.placeholder.com/150',
-      'startTime': DateTime(2024, 6, 20, 14, 0),
-      'endTime': DateTime(2024, 6, 20, 15, 0)
-    },
-    {
-      'name': 'Edward Wong',
-      'details': '30 y/o - Anxiety - No meds',
-      'imageUrl': 'https://via.placeholder.com/150',
-      'startTime': DateTime(2024, 6, 20, 14, 0),
-      'endTime': DateTime(2024, 6, 20, 15, 0)
-    },
-  ];
 
   final List<Map<String, dynamic>> recentChats = [
     {
@@ -72,6 +42,12 @@ class _TherapistHomePageState extends State<TherapistHomePage> with SingleTicker
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final therapistId = userProvider.userModel?.id;
+    if (therapistId != null) {
+      context.read<BookingProvider>().fetchBookings(therapistId);
+    }
   }
 
   @override
@@ -82,6 +58,8 @@ class _TherapistHomePageState extends State<TherapistHomePage> with SingleTicker
 
   @override
   Widget build(BuildContext context) {
+    var bookingProvider = context.watch<BookingProvider>();
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green,
@@ -105,7 +83,7 @@ class _TherapistHomePageState extends State<TherapistHomePage> with SingleTicker
                 padding: const EdgeInsets.all(16.0),
                 child: _buildHeader(context),
               ),
-              _buildScheduleContainer(),
+              _buildScheduleContainer(bookingProvider.bookings),
               const SizedBox(height: 16),
               _buildChatContainer(),
             ],
@@ -120,7 +98,7 @@ class _TherapistHomePageState extends State<TherapistHomePage> with SingleTicker
     );
   }
 
-  Widget _buildScheduleContainer() {
+  Widget _buildScheduleContainer(List<Map<String, dynamic>> bookings) {
     return Container(
       width: double.infinity, // Make sure the container uses the full width
       margin: const EdgeInsets.symmetric(horizontal: 0), // Remove horizontal margin
@@ -179,14 +157,12 @@ class _TherapistHomePageState extends State<TherapistHomePage> with SingleTicker
             constraints: BoxConstraints(
               maxHeight: 350, // Set a maximum height for the container
             ),
-            child: Flexible(
-              child: TabBarView(
-                controller: _tabController,
-                children: [
-                  _buildSessionList(_buildTodaySessions()),
-                  _buildSessionList(_buildUpcomingSessions()),
-                ],
-              ),
+            child: TabBarView(
+              controller: _tabController,
+              children: [
+                _buildSessionList(_buildTodaySessions(bookings)),
+                _buildSessionList(_buildUpcomingSessions(bookings)),
+              ],
             ),
           ),
         ],
@@ -291,11 +267,11 @@ class _TherapistHomePageState extends State<TherapistHomePage> with SingleTicker
     );
   }
 
-  List<Widget> _buildTodaySessions() {
+  List<Widget> _buildTodaySessions(List<Map<String, dynamic>> bookings) {
     DateTime now = DateTime.now();
     List<Widget> todaySessions = [];
 
-    for (var session in sessions) {
+    for (var session in bookings) {
       DateTime sessionTime = session['startTime'];
       DateTime sessionEndTime = session['endTime'];
       if (sessionTime.year == now.year && sessionTime.month == now.month && sessionTime.day == now.day) {
@@ -327,11 +303,11 @@ class _TherapistHomePageState extends State<TherapistHomePage> with SingleTicker
     return todaySessions;
   }
 
-  List<Widget> _buildUpcomingSessions() {
+  List<Widget> _buildUpcomingSessions(List<Map<String, dynamic>> bookings) {
     DateTime now = DateTime.now();
     List<Widget> upcomingSessions = [];
 
-    for (var session in sessions) {
+    for (var session in bookings) {
       DateTime sessionTime = session['startTime'];
       DateTime sessionEndTime = session['endTime'];
       if (sessionTime.isAfter(now)) {
@@ -364,7 +340,8 @@ class _TherapistHomePageState extends State<TherapistHomePage> with SingleTicker
   }
 
   Widget _buildHeader(BuildContext context) {
-    int todaySessionsCount = sessions
+    var bookingProvider = context.watch<BookingProvider>();
+    int todaySessionsCount = bookingProvider.bookings
         .where((session) {
       DateTime sessionTime = session['startTime'];
       return sessionTime.year == DateTime.now().year &&
@@ -379,11 +356,11 @@ class _TherapistHomePageState extends State<TherapistHomePage> with SingleTicker
           'Good morning, Dr. Kim',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
-/*        const SizedBox(height: 8),
+        const SizedBox(height: 8),
         Text(
           'You have $todaySessionsCount sessions today',
           style: TextStyle(fontSize: 16, color: Colors.grey),
-        ),*/
+        ),
       ],
     );
   }
