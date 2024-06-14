@@ -4,7 +4,7 @@ import 'package:pocket_pal/src/auth/banned_page.dart';
 import 'package:pocket_pal/src/auth/forgot_password.dart';
 import 'package:pocket_pal/src/auth/main_page.dart';
 import 'package:pocket_pal/src/screens/admin/dashboard/admin_home_page.dart';
-import 'package:pocket_pal/src/screens/admin/manage_forum/add_post_page.dart';
+import 'package:pocket_pal/src/screens/admin/moderate_forum/add_post_page.dart';
 import 'package:pocket_pal/src/screens/admin/manage_user/admin_register_page.dart';
 import 'package:pocket_pal/src/screens/admin/profile/admin_edit_profile.dart';
 import 'package:pocket_pal/src/screens/patient/member_navigator.dart';

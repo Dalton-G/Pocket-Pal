@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:pocket_pal/src/screens/admin/manage_forum/anxiety_post_page.dart';
-import 'package:pocket_pal/src/screens/admin/manage_forum/depression_post_page.dart';
-import 'package:pocket_pal/src/screens/admin/manage_forum/loneliness_post_page.dart';
-import 'package:pocket_pal/src/screens/admin/manage_forum/reported_post_page.dart';
+import 'package:pocket_pal/src/screens/admin/moderate_forum/anxiety_post_page.dart';
+import 'package:pocket_pal/src/screens/admin/moderate_forum/depression_post_page.dart';
+import 'package:pocket_pal/src/screens/admin/moderate_forum/loneliness_post_page.dart';
+import 'package:pocket_pal/src/screens/admin/moderate_forum/reported_post_page.dart';
 import 'package:pocket_pal/theme/app_theme.dart';
 
 class AdminManageForumPage extends StatefulWidget {

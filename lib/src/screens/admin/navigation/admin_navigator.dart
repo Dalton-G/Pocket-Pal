@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:pocket_pal/src/providers/admin/nav/admin_navbar_provider.dart';
 import 'package:pocket_pal/src/screens/admin/dashboard/admin_home_page.dart';
-import 'package:pocket_pal/src/screens/admin/manage_application/admin_manage_application_page.dart';
-import 'package:pocket_pal/src/screens/admin/manage_forum/admin_manage_forum_page.dart';
+import 'package:pocket_pal/src/screens/admin/verify_therapist/admin_manage_application_page.dart';
+import 'package:pocket_pal/src/screens/admin/moderate_forum/admin_manage_forum_page.dart';
 import 'package:pocket_pal/src/screens/admin/manage_user/admin_manage_user_page.dart';
 import 'package:pocket_pal/src/widgets/navbar/g_navbar_enhanced.dart';
 import 'package:pocket_pal/theme/app_theme.dart';
@@ -65,7 +65,7 @@ class AdminNavigator extends StatelessWidget {
                   icon: provider.selectedIndex == 1
                       ? Icons.verified_user
                       : Icons.verified_user_outlined,
-                  text: 'Manage Application',
+                  text: 'Verify Therapist',
                   textStyle: const TextStyle(
                     color: Colors.white,
                     fontFamily: 'Nunito',
@@ -95,7 +95,7 @@ class AdminNavigator extends StatelessWidget {
                   icon: provider.selectedIndex == 3
                       ? Icons.forum
                       : Icons.forum_outlined,
-                  text: 'Manage Forum',
+                  text: 'Moderate Forum',
                   textStyle: const TextStyle(
                     color: Colors.white,
                     fontFamily: 'Nunito',
