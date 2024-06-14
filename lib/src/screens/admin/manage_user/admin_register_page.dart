@@ -18,18 +18,16 @@ import 'package:pocket_pal/src/widgets/auth/pwTextFields.dart';
 import 'package:pocket_pal/theme/app_theme.dart';
 import 'package:provider/provider.dart';
 
-class RegisterPage extends StatefulWidget {
-  final VoidCallback showLoginPage;
-  const RegisterPage({super.key, required this.showLoginPage});
+class AdminRegisterPage extends StatefulWidget {
+  const AdminRegisterPage({super.key});
 
   @override
-  State<RegisterPage> createState() => _RegisterPageState();
+  State<AdminRegisterPage> createState() => AdminRegisterPageState();
 }
 
 List<String> genderOptions = ['Male', 'Female'];
-List<String> roleOptions = ['Member', 'Therapist'];
 
-class _RegisterPageState extends State<RegisterPage> {
+class AdminRegisterPageState extends State<AdminRegisterPage> {
   Uint8List? _image;
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
@@ -61,7 +59,7 @@ class _RegisterPageState extends State<RegisterPage> {
   void _validateAndSignUp(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
       try {
-        await context.read<UserProvider>().signUp(
+        await context.read<UserProvider>().createAdminAcc(
               _emailController.text.trim(),
               _passwordController.text.trim(),
               _firstNameController.text.trim(),
@@ -72,6 +70,9 @@ class _RegisterPageState extends State<RegisterPage> {
               _dobController.text.trim(),
               _image,
             );
+        showAuthDialog(context, "Registration Success!",
+            "You may now login to this new admin account.");
+        clearForm();
       } catch (error) {
         showAuthDialog(
           context,
@@ -82,8 +83,20 @@ class _RegisterPageState extends State<RegisterPage> {
     }
   }
 
+  void clearForm() {
+    _firstNameController.clear();
+    _lastNameController.clear();
+    _emailController.clear();
+    _passwordController.clear();
+    _phoneNumController.clear();
+    _dobController.clear();
+    setState(() {
+      _image = null;
+    });
+  }
+
   String currentGender = genderOptions[0];
-  String currentRole = roleOptions[0];
+  String currentRole = "Admin";
 
   @override
   Widget build(BuildContext context) {
@@ -131,7 +144,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   const SizedBox(height: 30),
                   Row(children: [
                     Text("Register ", style: AppTheme.largeTextGreen2),
-                    Text("Account", style: AppTheme.largeTextGrey2),
+                    Text("Admin", style: AppTheme.largeTextGrey2),
                   ]),
                   SizedBox(height: screenHeight * 0.04),
                   Form(
@@ -208,56 +221,10 @@ class _RegisterPageState extends State<RegisterPage> {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 20),
-                        Stack(
-                          children: [
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: Container(
-                                width: screenWidth / 1.65,
-                                height: 50,
-                                decoration: AppTheme.lightGreenBorder,
-                              ),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Text("Role: ", style: AppTheme.smallTextGrey),
-                                RadioSelection(
-                                  option1: roleOptions[0],
-                                  option2: roleOptions[1],
-                                  groupValue: currentRole,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      currentRole = value;
-                                    });
-                                  },
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
                         const SizedBox(height: 30),
                         AuthButton(
-                          buttonText: "Sign Up",
+                          buttonText: "Create Admin Account",
                           onTap: () => _validateAndSignUp(context),
-                        ),
-                        const SizedBox(height: 10),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Already have an account?",
-                              style: AppTheme.smallTextGrey,
-                            ),
-                            GestureDetector(
-                              onTap: widget.showLoginPage,
-                              child: Text(
-                                " Login now.",
-                                style: AppTheme.smallTextGreen,
-                              ),
-                            ),
-                          ],
                         ),
                       ],
                     ),

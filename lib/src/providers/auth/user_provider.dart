@@ -5,7 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:pocket_pal/src/models/user_model.dart';
+import 'package:pocket_pal/src/models/auth/user_model.dart';
 
 class UserProvider extends ChangeNotifier {
   UserModel? _userModel;
@@ -79,10 +79,9 @@ class UserProvider extends ChangeNotifier {
       final String userId = userCredential.user!.uid;
       String imageUrl;
 
-      // check if profile picture is null
       if (profilePicture != null) {
-        imageUrl = await uploadProfilePic('profile_pictures/$userId',
-            profilePicture); // Upload profile picture to Firebase Storage
+        imageUrl =
+            await uploadProfilePic('profile_pictures/$userId', profilePicture);
       } else {
         imageUrl = '';
       }
@@ -96,6 +95,40 @@ class UserProvider extends ChangeNotifier {
             role, dateOfBirth, imageUrl);
       }
       await fetchAndSetUserModel();
+    } catch (error) {
+      print("Error registering user: $error");
+    }
+  }
+
+  Future<void> createAdminAcc(
+    String email,
+    String password,
+    String firstName,
+    String lastName,
+    String phone,
+    String gender,
+    String role,
+    String dateOfBirth,
+    Uint8List? profilePicture,
+  ) async {
+    try {
+      final UserCredential userCredential =
+          await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      final String userId = userCredential.user!.uid;
+      String imageUrl;
+
+      if (profilePicture != null) {
+        imageUrl =
+            await uploadProfilePic('profile_pictures/$userId', profilePicture);
+      } else {
+        imageUrl = '';
+      }
+
+      addUserDetails(userId, email, firstName, lastName, phone, gender, role,
+          dateOfBirth, imageUrl);
     } catch (error) {
       print("Error registering user: $error");
     }
@@ -180,5 +213,29 @@ class UserProvider extends ChangeNotifier {
     TaskSnapshot snapshot = await uploadTask;
     String downloadUrl = await snapshot.ref.getDownloadURL();
     return downloadUrl;
+  }
+
+  Future<void> updateUserProfile({
+    required String userId,
+    required String firstName,
+    required String lastName,
+    required String phone,
+    required String dateOfBirth,
+    required Uint8List profilePicture,
+  }) async {
+    String imageUrl = await uploadProfilePic('profile_pictures/$userId',
+        profilePicture); // Upload profile picture to Firebase Storage
+    final Timestamp now = Timestamp.now();
+    await _db.collection('users').doc(userId).update(
+      {
+        'first_name': firstName.trim(),
+        'last_name': lastName.trim(),
+        'profile_picture': imageUrl,
+        'phone': phone.trim(),
+        'date_of_birth': dateOfBirth,
+        'updated_at': now,
+      },
+    );
+    await fetchAndSetUserModel();
   }
 }

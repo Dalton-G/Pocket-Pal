@@ -1,7 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:pocket_pal/src/providers/user_provider.dart';
+import 'package:pocket_pal/src/providers/auth/user_provider.dart';
 import 'package:pocket_pal/src/widgets/auth/alertDialog.dart';
 import 'package:pocket_pal/src/widgets/auth/authButton.dart';
 import 'package:pocket_pal/src/widgets/auth/emailTextFields.dart';

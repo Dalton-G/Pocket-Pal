@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:pocket_pal/src/providers/member_navbar_selection_provider.dart';
-import 'package:pocket_pal/src/providers/user_provider.dart';
-import 'package:pocket_pal/src/screens/admin/pages/admin_home_page.dart';
+import 'package:pocket_pal/src/providers/admin/nav/admin_navbar_provider.dart';
+import 'package:pocket_pal/src/screens/admin/dashboard/admin_home_page.dart';
+import 'package:pocket_pal/src/screens/admin/verify_therapist/admin_manage_application_page.dart';
+import 'package:pocket_pal/src/screens/admin/moderate_forum/admin_manage_forum_page.dart';
+import 'package:pocket_pal/src/screens/admin/manage_user/admin_manage_user_page.dart';
 import 'package:pocket_pal/src/widgets/navbar/g_navbar_enhanced.dart';
+import 'package:pocket_pal/theme/app_theme.dart';
 import 'package:provider/provider.dart';
 
 class AdminNavigator extends StatelessWidget {
@@ -11,13 +14,14 @@ class AdminNavigator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<MemberNavBarSelectionProvider>(context);
+    final provider = Provider.of<AdminNavbarProvider>(context);
 
     final PageController pageController =
         PageController(initialPage: provider.selectedIndex);
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      resizeToAvoidBottomInset: false,
+      backgroundColor: AppTheme.backgroundWhite,
       body: Stack(
         children: [
           PageView(
@@ -27,6 +31,9 @@ class AdminNavigator extends StatelessWidget {
             },
             children: const [
               AdminHomePage(),
+              AdminManageApplicationPage(),
+              AdminManageUserPage(),
+              AdminManageForumPage(),
             ],
           ),
 
@@ -56,9 +63,9 @@ class AdminNavigator extends StatelessWidget {
                 ),
                 GButton(
                   icon: provider.selectedIndex == 1
-                      ? Icons.calendar_month
-                      : Icons.calendar_month_outlined,
-                  text: 'Schedule',
+                      ? Icons.verified_user
+                      : Icons.verified_user_outlined,
+                  text: 'Verify Therapist',
                   textStyle: const TextStyle(
                     color: Colors.white,
                     fontFamily: 'Nunito',
@@ -71,9 +78,9 @@ class AdminNavigator extends StatelessWidget {
                 ),
                 GButton(
                   icon: provider.selectedIndex == 2
-                      ? Icons.forum
-                      : Icons.forum_outlined,
-                  text: 'Chat',
+                      ? Icons.group
+                      : Icons.group_outlined,
+                  text: 'Manage User',
                   textStyle: const TextStyle(
                     color: Colors.white,
                     fontFamily: 'Nunito',
@@ -86,9 +93,9 @@ class AdminNavigator extends StatelessWidget {
                 ),
                 GButton(
                   icon: provider.selectedIndex == 3
-                      ? Icons.group
-                      : Icons.group_outlined,
-                  text: 'Forum',
+                      ? Icons.forum
+                      : Icons.forum_outlined,
+                  text: 'Moderate Forum',
                   textStyle: const TextStyle(
                     color: Colors.white,
                     fontFamily: 'Nunito',
@@ -104,14 +111,6 @@ class AdminNavigator extends StatelessWidget {
             ),
           ),
         ],
-      ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 80.0),
-        child: FloatingActionButton(
-          onPressed: () => context.read<UserProvider>().logout(),
-          backgroundColor: Theme.of(context).primaryColor,
-          child: const Icon(Icons.logout),
-        ),
       ),
     );
   }

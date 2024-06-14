@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:pocket_pal/src/providers/member_navbar_selection_provider.dart';
-import 'package:pocket_pal/src/providers/user_provider.dart';
+import 'package:pocket_pal/src/providers/member/member_navbar_selection_provider.dart';
+import 'package:pocket_pal/src/providers/auth/user_provider.dart';
 import 'package:pocket_pal/src/screens/patient/pages/member_chat_page.dart';
 import 'package:pocket_pal/src/screens/patient/pages/member_forum_page.dart';
 import 'package:pocket_pal/src/screens/patient/pages/member_home_page.dart';
