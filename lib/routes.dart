@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pocket_pal/src/auth/auth_page.dart';
+import 'package:pocket_pal/src/auth/banned_page.dart';
 import 'package:pocket_pal/src/auth/forgot_password.dart';
 import 'package:pocket_pal/src/auth/main_page.dart';
 import 'package:pocket_pal/src/screens/admin/dashboard/admin_home_page.dart';
@@ -21,6 +22,7 @@ class Routes {
   static const String authPage = '/auth-page';
   static const String forgotPW = '/forgot-pw';
   static const String mainPage = '/main-page';
+  static const String bannedPage = '/banned-page';
 
   static const String memberHome = '/member-home-page';
   static const String memberSchedule = '/member-schedule-page';
@@ -42,6 +44,7 @@ class Routes {
     authPage: (BuildContext context) => const AuthPage(),
     forgotPW: (BuildContext context) => const ForgotPasswordPage(),
     mainPage: (BuildContext context) => const MainPage(),
+    bannedPage: (BuildContext context) => const BannedPage(),
     memberHome: (BuildContext context) => const MemberHomePage(),
     memberSchedule: (BuildContext context) => const MemberSchedulePage(),
     memberChat: (BuildContext context) => const MemberChatPage(),

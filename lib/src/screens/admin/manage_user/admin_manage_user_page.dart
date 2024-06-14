@@ -184,6 +184,7 @@ class _AdminManageUserPageState extends State<AdminManageUserPage> {
         itemCount: _resultList.length,
         itemBuilder: (context, index) {
           var user = _resultList[index].data() as Map<String, dynamic>;
+          String profilePictureUrl = user['profile_picture'];
           return ListTile(
             title: Row(
               children: [
@@ -197,8 +198,10 @@ class _AdminManageUserPageState extends State<AdminManageUserPage> {
               ],
             ),
             leading: CircleAvatar(
-              backgroundImage:
-                  NetworkImage(_resultList[index]['profile_picture']),
+              backgroundImage: profilePictureUrl != ""
+                  ? NetworkImage(profilePictureUrl)
+                  : AssetImage('lib/src/assets/images/avatar.png')
+                      as ImageProvider,
             ),
             subtitle: Text(_resultList[index]['role'].toString().toLowerCase(),
                 style: AppTheme.smallTextGreen),

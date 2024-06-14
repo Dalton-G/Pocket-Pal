@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pocket_pal/src/auth/auth_page.dart';
+import 'package:pocket_pal/src/auth/banned_page.dart';
 import 'package:pocket_pal/src/models/auth/user_model.dart';
 import 'package:pocket_pal/src/screens/admin/pages/admin_navigator.dart';
 import 'package:pocket_pal/src/screens/patient/member_navigator.dart';
@@ -36,6 +37,8 @@ class MainPageState extends State<MainPage> {
             builder: (_, userModel, __) {
               if (userModel == null) {
                 return const AuthPage();
+              } else if (userModel.isBanned) {
+                return const BannedPage();
               } else {
                 final String role = userModel.role;
                 if (role == 'member' || role == 'Member') {

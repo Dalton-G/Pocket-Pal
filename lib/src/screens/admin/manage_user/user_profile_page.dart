@@ -73,8 +73,10 @@ class _UserProfilePageState extends State<UserProfilePage> {
               children: [
                 CircleAvatar(
                   radius: 100,
-                  backgroundImage:
-                      NetworkImage(widget.userData['profile_picture']),
+                  backgroundImage: widget.userData['profile_picture'] != ""
+                      ? NetworkImage(widget.userData['profile_picture'])
+                      : AssetImage('lib/src/assets/images/avatar.png')
+                          as ImageProvider,
                 ),
                 SizedBox(height: 10),
                 Text(

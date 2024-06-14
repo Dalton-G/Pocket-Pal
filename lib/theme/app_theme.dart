@@ -99,6 +99,13 @@ class AppTheme {
     fontWeight: FontWeight.bold,
     height: 1,
   );
+  static const TextStyle largeTextRed = TextStyle(
+    fontSize: 40.0,
+    color: lightRed,
+    fontFamily: 'Nunito',
+    fontWeight: FontWeight.bold,
+    height: 1,
+  );
   static const TextStyle largeTextGrey = TextStyle(
     fontSize: 40.0,
     color: slateGrey,
