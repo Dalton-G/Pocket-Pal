@@ -19,13 +19,14 @@ class PostListTile extends StatelessWidget {
       title: Text(title, style: AppTheme.normalTextGrey),
       subtitle: Text(description),
       tileColor: AppTheme.secondaryGreen,
-      onTap: () {},
-      leading: ClipRRect(
+      trailing: ClipRRect(
         borderRadius: BorderRadius.circular(10),
-        child: Image(
+        child: FadeInImage(
           height: 80,
           width: 80,
           fit: BoxFit.cover,
+          placeholder:
+              AssetImage('lib/src/assets/images/placeholder_image.png'),
           image: NetworkImage(thumbnail),
         ),
       ),

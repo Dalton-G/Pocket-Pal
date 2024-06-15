@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:pocket_pal/src/providers/forum/post_provider.dart';
+import 'package:pocket_pal/src/screens/admin/moderate_forum/full_post_page.dart';
 import 'package:pocket_pal/src/widgets/auth/alertDialog.dart';
 import 'package:pocket_pal/src/widgets/forum/post_list_tile.dart';
 import 'package:pocket_pal/theme/app_theme.dart';
@@ -64,10 +65,19 @@ Widget buildPostPage(
                           ),
                         ],
                       ),
-                      child: PostListTile(
-                        title: title,
-                        description: description,
-                        thumbnail: thumbnail,
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      FullPostPage(postData: postData)));
+                        },
+                        child: PostListTile(
+                          title: title,
+                          description: description,
+                          thumbnail: thumbnail,
+                        ),
                       ),
                     );
                   },
@@ -102,36 +112,47 @@ Widget buildReportedPostPage(
                     final thumbnail = postData['thumbnail'];
 
                     return Slidable(
-                        endActionPane: ActionPane(
-                          motion: const StretchMotion(),
-                          children: [
-                            SlidableAction(
-                              onPressed: (BuildContext context) => {
-                                _postProvider.deletePost(
-                                    postData['id'], postData['thumbnail'])
-                              },
-                              icon: Icons.delete,
-                              label: 'Delete',
-                              backgroundColor: AppTheme.primaryOrange,
-                            ),
-                          ],
-                        ),
-                        startActionPane: ActionPane(
-                          motion: const StretchMotion(),
-                          children: [
-                            SlidableAction(
-                              onPressed: (BuildContext context) =>
-                                  _postProvider.revertPost(postData['id']),
-                              icon: Icons.undo,
-                              label: 'Revert',
-                              backgroundColor: AppTheme.primaryBlue,
-                            ),
-                          ],
-                        ),
+                      endActionPane: ActionPane(
+                        motion: const StretchMotion(),
+                        children: [
+                          SlidableAction(
+                            onPressed: (BuildContext context) => {
+                              _postProvider.deletePost(
+                                  postData['id'], postData['thumbnail'])
+                            },
+                            icon: Icons.delete,
+                            label: 'Delete',
+                            backgroundColor: AppTheme.primaryOrange,
+                          ),
+                        ],
+                      ),
+                      startActionPane: ActionPane(
+                        motion: const StretchMotion(),
+                        children: [
+                          SlidableAction(
+                            onPressed: (BuildContext context) =>
+                                _postProvider.revertPost(postData['id']),
+                            icon: Icons.undo,
+                            label: 'Revert',
+                            backgroundColor: AppTheme.primaryBlue,
+                          ),
+                        ],
+                      ),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      FullPostPage(postData: postData)));
+                        },
                         child: PostListTile(
-                            title: title,
-                            description: description,
-                            thumbnail: thumbnail));
+                          title: title,
+                          description: description,
+                          thumbnail: thumbnail,
+                        ),
+                      ),
+                    );
                   },
                 )
               : Center(
