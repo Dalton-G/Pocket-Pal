@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:pocket_pal/src/providers/forum/post_provider.dart';
-import 'package:pocket_pal/src/screens/admin/moderate_forum/full_post_page.dart';
 import 'package:pocket_pal/src/widgets/auth/alertDialog.dart';
 import 'package:pocket_pal/src/widgets/forum/post_list_tile.dart';
 import 'package:pocket_pal/theme/app_theme.dart';
@@ -65,19 +64,10 @@ Widget buildPostPage(
                           ),
                         ],
                       ),
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      FullPostPage(postData: postData)));
-                        },
-                        child: PostListTile(
-                          title: title,
-                          description: description,
-                          thumbnail: thumbnail,
-                        ),
+                      child: PostListTile(
+                        title: title,
+                        description: description,
+                        thumbnail: thumbnail,
                       ),
                     );
                   },
@@ -138,19 +128,10 @@ Widget buildReportedPostPage(
                           ),
                         ],
                       ),
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      FullPostPage(postData: postData)));
-                        },
-                        child: PostListTile(
-                          title: title,
-                          description: description,
-                          thumbnail: thumbnail,
-                        ),
+                      child: PostListTile(
+                        title: title,
+                        description: description,
+                        thumbnail: thumbnail,
                       ),
                     );
                   },
