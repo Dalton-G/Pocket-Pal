@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:pocket_pal/src/widgets/admin/manage_profile/ban_button.dart';
+import 'package:pocket_pal/src/widgets/auth/alertDialog.dart';
 import 'package:pocket_pal/src/widgets/auth/authButton.dart';
 import 'package:pocket_pal/theme/app_theme.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -64,6 +67,50 @@ class _ViewTherapistApplicationState extends State<ViewTherapistApplication> {
         );
       },
     );
+  }
+
+  void _approveApplication(BuildContext context) async {
+    final _db = FirebaseFirestore.instance;
+    final _storage = FirebaseStorage.instance;
+    final String applicationId = widget.applicationData['id'];
+    final String therapistId = widget.therapistData['id'];
+
+    try {
+      // Delete resume from Firebase Storage
+      final String resumeUrl = widget.applicationData['resumeUrl'];
+      if (resumeUrl.isNotEmpty) {
+        await _storage.refFromURL(resumeUrl).delete();
+      }
+
+      // Delete license images from Firebase Storage
+      final List<String> licenseUrls =
+          List<String>.from(widget.applicationData['licenseUrls']);
+      for (String licenseUrl in licenseUrls) {
+        await _storage.refFromURL(licenseUrl).delete();
+      }
+
+      // Delete the application document
+      await _db.collection('applications').doc(applicationId).delete();
+
+      // Update the therapist document to set 'is_approved' to true
+      await _db.collection('users').doc(therapistId).update({
+        'is_approved': true,
+      });
+
+      Navigator.pop(context);
+
+      showAuthDialog(
+        context,
+        "Application Approved",
+        "The therapist has been approved",
+      );
+    } catch (e) {
+      showAuthDialog(
+        context,
+        "Error: $e",
+        "Failed to approve the application. Please try again.",
+      );
+    }
   }
 
   @override
@@ -131,12 +178,18 @@ class _ViewTherapistApplicationState extends State<ViewTherapistApplication> {
                 ],
               ),
               const SizedBox(height: 50),
-              AuthButton(
-                buttonText: 'Approve',
+              GestureDetector(
+                onTap: () => _approveApplication(context),
+                child: AuthButton(
+                  buttonText: 'Approve',
+                ),
               ),
               const SizedBox(height: 20),
-              BanButton(
-                buttonText: 'Reject',
+              GestureDetector(
+                onTap: () {},
+                child: BanButton(
+                  buttonText: 'Reject',
+                ),
               ),
             ],
           ),

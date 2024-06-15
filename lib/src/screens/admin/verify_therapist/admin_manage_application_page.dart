@@ -56,12 +56,9 @@ class _AdminManageApplicationPageState
                         final applicationData = applicationDoc.data();
 
                         final therapistId = applicationData['therapistId'];
-                        //final licenseUrls =
                         applicationData['licenseUrls'] as List<dynamic>;
-                        // resumeUrl = applicationData['resumeUrl'];
                         final specialization =
                             applicationData['specialization'];
-                        //final stateOfLicensure =
                         applicationData['state_of_licensure'];
 
                         return FutureBuilder<Map<String, dynamic>>(
