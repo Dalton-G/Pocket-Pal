@@ -100,6 +100,7 @@ class _LoginPageState extends State<LoginPage> {
                         Text("Your Email:", style: AppTheme.normalTextGrey),
                         const SizedBox(height: 10),
                         EmailTextField(
+                          key: Key('emailTF'),
                           controller: _emailController,
                           width: screenWidth,
                         ),
@@ -107,6 +108,7 @@ class _LoginPageState extends State<LoginPage> {
                         Text("Your Password:", style: AppTheme.normalTextGrey),
                         const SizedBox(height: 10),
                         PasswordTextField(
+                          key: Key('passwordTF'),
                           controller: _passwordController,
                           width: screenWidth,
                         )
@@ -128,6 +130,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(height: 45),
                   AuthButton(
+                    key: Key('login'),
                     buttonText: "Sign In",
                     onTap: () => _validateAndLogin(context),
                   ),

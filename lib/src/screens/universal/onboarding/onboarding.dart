@@ -87,6 +87,7 @@ class OnboardingPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 GestureDetector(
+                  key: Key('start'),
                   onTap: () {
                     Navigator.pushNamed(context, '/main-page');
                   },
