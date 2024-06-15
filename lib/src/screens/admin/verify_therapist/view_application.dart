@@ -22,7 +22,7 @@ class _ViewTherapistApplicationState extends State<ViewTherapistApplication> {
   void _launchResume(BuildContext context) async {
     final resumeUrl = widget.applicationData['resumeUrl'];
     final Uri uri = Uri.parse(resumeUrl);
-    await launchUrl(uri, mode: LaunchMode.externalApplication);
+    await launchUrl(uri, mode: LaunchMode.inAppBrowserView);
   }
 
   void _showLicenseDialog(BuildContext context) {
@@ -113,6 +113,50 @@ class _ViewTherapistApplicationState extends State<ViewTherapistApplication> {
     }
   }
 
+  void _rejectApplication(BuildContext context) async {
+    final _db = FirebaseFirestore.instance;
+    final _storage = FirebaseStorage.instance;
+    final String applicationId = widget.applicationData['id'];
+    final String therapistId = widget.therapistData['id'];
+
+    try {
+      // Delete resume from Firebase Storage
+      final String resumeUrl = widget.applicationData['resumeUrl'];
+      if (resumeUrl.isNotEmpty) {
+        await _storage.refFromURL(resumeUrl).delete();
+      }
+
+      // Delete license images from Firebase Storage
+      final List<String> licenseUrls =
+          List<String>.from(widget.applicationData['licenseUrls']);
+      for (String licenseUrl in licenseUrls) {
+        await _storage.refFromURL(licenseUrl).delete();
+      }
+
+      // Delete the application document
+      await _db.collection('applications').doc(applicationId).delete();
+
+      // Update the therapist document to set 'is_approved' to true
+      await _db.collection('users').doc(therapistId).update({
+        'is_banned': true,
+      });
+
+      Navigator.pop(context);
+
+      showAuthDialog(
+        context,
+        "Application Rejected",
+        "The therapist has been rejected",
+      );
+    } catch (e) {
+      showAuthDialog(
+        context,
+        "Error: $e",
+        "Failed to reject the application. Please try again.",
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -186,7 +230,7 @@ class _ViewTherapistApplicationState extends State<ViewTherapistApplication> {
               ),
               const SizedBox(height: 20),
               GestureDetector(
-                onTap: () {},
+                onTap: () => _rejectApplication(context),
                 child: BanButton(
                   buttonText: 'Reject',
                 ),

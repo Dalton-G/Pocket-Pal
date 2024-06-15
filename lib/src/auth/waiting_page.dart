@@ -4,8 +4,8 @@ import 'package:pocket_pal/src/widgets/admin/manage_profile/ban_button.dart';
 import 'package:pocket_pal/theme/app_theme.dart';
 import 'package:provider/provider.dart';
 
-class BannedPage extends StatelessWidget {
-  const BannedPage({super.key});
+class WaitingPage extends StatelessWidget {
+  const WaitingPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +18,7 @@ class BannedPage extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(35.0),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const SizedBox(height: 30),
               Container(
@@ -25,20 +26,19 @@ class BannedPage extends StatelessWidget {
                 child: Image.asset(
                     'lib/src/assets/images/pocketpallogowithword.png'),
               ),
-              const SizedBox(height: 60),
-              Text("Access Denied", style: AppTheme.largeTextRed),
-              const SizedBox(height: 10),
+              const SizedBox(height: 30),
+              Text("Pending\nApproval", style: AppTheme.largeTextGreen),
+              const SizedBox(height: 20),
               const Image(
-                image: AssetImage('lib/src/assets/images/banned.png'),
+                image: AssetImage('lib/src/assets/images/waiting.png'),
               ),
               const SizedBox(height: 20),
               Text("Hi, ${currentUser?.firstName} ${currentUser?.lastName}",
                   style: AppTheme.smallTextGrey),
-              const Text('You have been banned.',
-                  style: AppTheme.mediumTextGrey),
+              const Text('Hang in there!', style: AppTheme.mediumTextGrey),
               const SizedBox(height: 20),
               const Text(
-                'Your account has been \n suspended for misconduct.',
+                'Your application is being \n reviewed by an Admin. \n Please check back later.',
                 style: AppTheme.normalTextGrey,
                 textAlign: TextAlign.center,
               ),

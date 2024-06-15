@@ -4,8 +4,8 @@ import 'package:pocket_pal/src/widgets/admin/manage_profile/ban_button.dart';
 import 'package:pocket_pal/theme/app_theme.dart';
 import 'package:provider/provider.dart';
 
-class BannedPage extends StatelessWidget {
-  const BannedPage({super.key});
+class RejectedPage extends StatelessWidget {
+  const RejectedPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,20 +25,19 @@ class BannedPage extends StatelessWidget {
                 child: Image.asset(
                     'lib/src/assets/images/pocketpallogowithword.png'),
               ),
-              const SizedBox(height: 60),
-              Text("Access Denied", style: AppTheme.largeTextRed),
-              const SizedBox(height: 10),
+              const SizedBox(height: 40),
+              Text("Rejected", style: AppTheme.largeTextRed),
+              const SizedBox(height: 20),
               const Image(
-                image: AssetImage('lib/src/assets/images/banned.png'),
+                image: AssetImage('lib/src/assets/images/rejected.png'),
               ),
               const SizedBox(height: 20),
               Text("Hi, ${currentUser?.firstName} ${currentUser?.lastName}",
                   style: AppTheme.smallTextGrey),
-              const Text('You have been banned.',
-                  style: AppTheme.mediumTextGrey),
+              const Text("You're not for us", style: AppTheme.mediumTextGrey),
               const SizedBox(height: 20),
               const Text(
-                'Your account has been \n suspended for misconduct.',
+                "We're sad to inform you that your application has been rejected.",
                 style: AppTheme.normalTextGrey,
                 textAlign: TextAlign.center,
               ),
