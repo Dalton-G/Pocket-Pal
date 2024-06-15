@@ -20,6 +20,7 @@ class AppTheme {
 
   static const backgroundWhite = Color(0XFFFDF9F9);
   static const slateGrey = Color(0XFF27344F);
+  static const lightRed = Color(0XFF990000);
 
   static final ThemeData lightTheme = ThemeData(
     scaffoldBackgroundColor: white,
@@ -98,6 +99,13 @@ class AppTheme {
     fontWeight: FontWeight.bold,
     height: 1,
   );
+  static const TextStyle largeTextRed = TextStyle(
+    fontSize: 40.0,
+    color: lightRed,
+    fontFamily: 'Nunito',
+    fontWeight: FontWeight.bold,
+    height: 1,
+  );
   static const TextStyle largeTextGrey = TextStyle(
     fontSize: 40.0,
     color: slateGrey,
@@ -125,6 +133,12 @@ class AppTheme {
     fontFamily: 'Nunito',
     fontWeight: FontWeight.bold,
   );
+  static const TextStyle mediumTextGrey = TextStyle(
+    fontSize: 24.0,
+    color: slateGrey,
+    fontFamily: 'Nunito',
+    fontWeight: FontWeight.bold,
+  );
   static const TextStyle normalTextGrey = TextStyle(
     fontSize: 16.0,
     color: slateGrey,
@@ -134,6 +148,12 @@ class AppTheme {
   static const TextStyle normalTextWhite = TextStyle(
     fontSize: 16.0,
     color: backgroundWhite,
+    fontFamily: 'Nunito',
+    fontWeight: FontWeight.w600,
+  );
+  static const TextStyle normalTextGreen = TextStyle(
+    fontSize: 16.0,
+    color: primaryGreen,
     fontFamily: 'Nunito',
     fontWeight: FontWeight.w600,
   );
@@ -148,6 +168,18 @@ class AppTheme {
     color: slateGrey,
     fontFamily: 'Nunito',
     fontWeight: FontWeight.w600,
+  );
+  static const TextStyle smallTextWhite = TextStyle(
+    fontSize: 14.0,
+    color: backgroundWhite,
+    fontFamily: 'Nunito',
+    fontWeight: FontWeight.w600,
+  );
+  static const TextStyle boldTextGreen = TextStyle(
+    fontSize: 16.0,
+    color: primaryGreen,
+    fontFamily: 'Nunito',
+    fontWeight: FontWeight.bold,
   );
 
   // Onboarding Page Styles
@@ -172,6 +204,15 @@ class AppTheme {
   static const BoxDecoration onboardingButton = BoxDecoration(
     color: primaryGreen,
     borderRadius: BorderRadius.all(Radius.circular(10)),
+  );
+  static const BoxDecoration banButton = BoxDecoration(
+    color: lightRed,
+    borderRadius: BorderRadius.all(Radius.circular(10)),
+  );
+  static BoxDecoration onboardingButtonOutline = BoxDecoration(
+    color: Colors.transparent,
+    borderRadius: BorderRadius.all(Radius.circular(10)),
+    border: Border.all(color: primaryGreen, width: 2),
   );
   static const TextStyle onboardingButtonText = TextStyle(
     fontSize: 16.0,
@@ -202,6 +243,21 @@ class AppTheme {
   static const BoxDecoration lightGreenBorder = BoxDecoration(
     color: secondaryGreen,
     borderRadius: BorderRadius.all(Radius.circular(10)),
+  );
+
+  // Forun
+  static InputDecoration categoryDropdownMenu = InputDecoration(
+    fillColor: AppTheme.secondaryGreen,
+    filled: true,
+    prefixIcon: Icon(Icons.list, color: AppTheme.primaryGreen),
+    enabledBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: AppTheme.secondaryGreen),
+      borderRadius: BorderRadius.circular(10),
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: AppTheme.secondaryGreen),
+      borderRadius: BorderRadius.circular(10),
+    ),
   );
 
   // static final ThemeData darkTheme = ThemeData(
