@@ -21,13 +21,13 @@ class AvailabilityModel {
 
   factory AvailabilityModel.fromDocument(DocumentSnapshot doc) {
     return AvailabilityModel(
-      id: doc['id'],
-      therapistId: doc['therapist_id'],
-      availableOn: (doc['available_on'] as Timestamp).toDate(),
-      availableUntil: (doc['available_until'] as Timestamp).toDate(),
-      isBooked: doc['is_booked'],
-      createdAt: (doc['created_at'] as Timestamp).toDate(),
-      updatedAt: (doc['updated_at'] as Timestamp).toDate(),
+      id: doc.id,
+      therapistId: doc.get('therapist_id'),
+      availableOn: (doc.get('available_on') as Timestamp).toDate(),
+      availableUntil: (doc.get('available_until') as Timestamp).toDate(),
+      isBooked: doc.get('is_booked'),
+      createdAt: (doc.get('created_at') as Timestamp).toDate(),
+      updatedAt: (doc.get('updated_at') as Timestamp).toDate(),
     );
   }
 }

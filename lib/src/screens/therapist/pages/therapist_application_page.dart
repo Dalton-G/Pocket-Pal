@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:pocket_pal/src/providers/user_provider.dart';
 import 'package:pocket_pal/src/providers/therapist/application_provider.dart';
 import 'package:pocket_pal/theme/app_theme.dart';
 import 'package:pocket_pal/src/enums/specialization.dart';
@@ -158,6 +159,11 @@ class _TherapistApplicationPageState extends State<TherapistApplicationPage> {
             ],
           ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => context.read<UserProvider>().logout(),
+        backgroundColor: Theme.of(context).primaryColor,
+        child: const Icon(Icons.logout),
       ),
     );
   }

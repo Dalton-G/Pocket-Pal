@@ -3,18 +3,23 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
-import 'package:pocket_pal/src/models/application_model.dart';
+import 'package:uuid/uuid.dart';
 
 class ApplicationProvider extends ChangeNotifier {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   final FirebaseStorage _storage = FirebaseStorage.instance;
 
   Future<String> uploadFile(PlatformFile file, String therapistId, String fileType) async {
-    String fileName = '${DateTime.now().toIso8601String()}-$fileType.${file.extension}';
-    Reference storageReference = _storage.ref().child('therapist-applications/$therapistId/$fileName');
-    UploadTask uploadTask = storageReference.putFile(File(file.path!));
-    await uploadTask.whenComplete(() => null);
-    return await storageReference.getDownloadURL();
+    try {
+      String fileName = '${DateTime.now().toIso8601String()}-$fileType.${file.extension}';
+      Reference storageReference = _storage.ref().child('therapist-applications/$therapistId/$fileName');
+      UploadTask uploadTask = storageReference.putFile(File(file.path!));
+      await uploadTask.whenComplete(() => null);
+      return await storageReference.getDownloadURL();
+    } catch (e) {
+      print('File upload failed: $e');
+      rethrow;
+    }
   }
 
   Future<void> submitApplication({
@@ -24,44 +29,38 @@ class ApplicationProvider extends ChangeNotifier {
     required PlatformFile resumeFile,
     required List<PlatformFile> licenseFiles,
   }) async {
-    String resumeUrl = await uploadFile(resumeFile, therapistId, 'resume');
-    List<String> licenseUrls = [];
+    try {
+      String resumeUrl = await uploadFile(resumeFile, therapistId, 'resume');
+      List<String> licenseUrls = [];
 
-    for (var licenseFile in licenseFiles) {
-      String licenseUrl = await uploadFile(licenseFile, therapistId, 'license');
-      licenseUrls.add(licenseUrl);
+      for (var licenseFile in licenseFiles) {
+        String licenseUrl = await uploadFile(licenseFile, therapistId, 'license');
+        licenseUrls.add(licenseUrl);
+      }
+
+      final String id = Uuid().v4();
+      final Timestamp now = Timestamp.now();
+
+      await _db.collection('applications').doc(id).set({
+        'id': id,
+        'therapistId': therapistId,
+        'specialization': specialization,
+        'state_of_licensure': stateOfLicensure,
+        'resumeUrl': resumeUrl,
+        'licenseUrls': licenseUrls,
+        'createdAt': now,
+        'updatedAt': now,
+      });
+
+      // Update the user's document to set is_submitted to true
+      await _db.collection('users').doc(therapistId).update({
+        'is_submitted': true,
+        'updated_at': now,
+      });
+
+      notifyListeners();
+    } catch (e) {
+      print('Application submission failed: $e');
     }
-
-    DocumentReference docRef = _db.collection('applications').doc();
-
-    ApplicationModel application = ApplicationModel(
-      id: docRef.id,
-      therapistId: therapistId,
-      specialization: specialization,
-      state_of_licensure: stateOfLicensure,
-      resumeUrl: resumeUrl,
-      licenseUrls: licenseUrls,
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
-    );
-
-    await docRef.set({
-      'id': application.id,
-      'therapistId': application.therapistId,
-      'specialization': application.specialization,
-      'state_of_licensure': application.state_of_licensure,
-      'resumeUrl': application.resumeUrl,
-      'licenseUrls': application.licenseUrls,
-      'createdAt': FieldValue.serverTimestamp(),
-      'updatedAt': FieldValue.serverTimestamp(),
-    });
-
-    // Update the user's document to set is_submitted to true
-    await _db.collection('users').doc(therapistId).update({
-      'is_submitted': true,
-      'updated_at': FieldValue.serverTimestamp(),
-    });
-
-    notifyListeners();
   }
 }

@@ -6,9 +6,9 @@ import 'package:pocket_pal/src/screens/admin/pages/admin_home_page.dart';
 import 'package:pocket_pal/src/screens/patient/member_navigator.dart';
 import 'package:pocket_pal/src/screens/patient/pages/member_chat_page.dart';
 import 'package:pocket_pal/src/screens/patient/pages/member_forum_page.dart';
-import 'package:pocket_pal/src/screens/therapist/pages/therapist_home_page.dart';
-import 'package:pocket_pal/src/screens/therapist/pages/therapist_schedule_page.dart';
-import 'package:pocket_pal/src/screens/therapist/therapist_navigator.dart';
+import 'package:pocket_pal/src/screens/therapist/pages/add_session_note_page.dart';
+import 'package:pocket_pal/src/screens/therapist/pages/session_records_page.dart';
+import 'package:pocket_pal/src/screens/therapist/pages/therapist_edit_profile_page.dart';
 import 'src/screens/patient/pages/member_home_page.dart';
 import 'package:pocket_pal/src/screens/universal/onboarding/onboarding.dart';
 import 'package:pocket_pal/src/screens/patient/pages/member_schedule_page.dart';
@@ -30,9 +30,9 @@ class Routes {
   static const String adminHome = '/admin-home-page';
 
   // Therapist routes
-  static const String therapistHome = '/therapist-home-page';
-  static const String therapistSchedule = '/therapist-schedule-page';
-  static const String therapistNavigator = '/therapist-navigator';
+  static const String therapistEditProfilePage = '/therapist-edit-profile-page';
+  static const String sessionRecordsPage = '/session-records-page';
+  static const String addSessionNotePage = '/add-session-note-page';
 
   // routes
   static final dynamic routes = <String, WidgetBuilder>{
@@ -46,8 +46,8 @@ class Routes {
     memberForum: (BuildContext context) => const MemberForumPage(),
     memberNavigator: (BuildContext context) => const MemberNavigator(),
     adminHome: (BuildContext context) => const AdminHomePage(),
-    therapistHome: (BuildContext context) => const TherapistHomePage(),
-    therapistSchedule: (BuildContext context) => const TherapistSchedulePage(),
-    therapistNavigator: (BuildContext context) => const TherapistNavigator(),
+    therapistEditProfilePage: (BuildContext context) => const TherapistEditProfilePage(),
+    sessionRecordsPage: (BuildContext context) => const SessionRecordsPage(),
+    addSessionNotePage: (BuildContext context) => const AddSessionNotePage(),
   };
 }

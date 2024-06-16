@@ -11,7 +11,7 @@ class TherapistHomePage extends StatefulWidget {
   _TherapistHomePageState createState() => _TherapistHomePageState();
 }
 
-class _TherapistHomePageState extends State<TherapistHomePage> with SingleTickerProviderStateMixin {
+class _TherapistHomePageState extends State<TherapistHomePage> with TickerProviderStateMixin {
   late TabController _tabController;
 
   final List<Map<String, dynamic>> recentChats = [
@@ -42,11 +42,14 @@ class _TherapistHomePageState extends State<TherapistHomePage> with SingleTicker
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    _fetchBookings();
+  }
 
+  void _fetchBookings() {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     final therapistId = userProvider.userModel?.id;
     if (therapistId != null) {
-      context.read<BookingProvider>().fetchBookings(therapistId);
+      context.read<BookingProvider>().getBookings(therapistId);
     }
   }
 
@@ -59,6 +62,8 @@ class _TherapistHomePageState extends State<TherapistHomePage> with SingleTicker
   @override
   Widget build(BuildContext context) {
     var bookingProvider = context.watch<BookingProvider>();
+    final userProvider = Provider.of<UserProvider>(context);
+    final currentUser = userProvider.userModel;
 
     return Scaffold(
       appBar: AppBar(
@@ -66,35 +71,83 @@ class _TherapistHomePageState extends State<TherapistHomePage> with SingleTicker
         elevation: 0,
         title: const Text('Therapist Home'),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications),
-            onPressed: () {},
+          PopupMenuButton<String>(
+            onSelected: (value) {
+              if (value == 'Profile') {
+                Navigator.pushNamed(context, '/therapist-edit-profile-page');
+              } else if (value == 'Logout') {
+                context.read<UserProvider>().logout();
+              }
+            },
+            itemBuilder: (BuildContext context) {
+              return {'Profile', 'Logout'}.map((String choice) {
+                return PopupMenuItem<String>(
+                  value: choice,
+                  child: Text(choice),
+                );
+              }).toList();
+            },
+            icon: CircleAvatar(
+              radius: 20,
+              backgroundImage: currentUser?.profilePicture != null
+                  ? NetworkImage(currentUser!.profilePicture)
+                  : const AssetImage('lib/src/assets/images/avatar.png') as ImageProvider,
+            ),
           ),
-          const SizedBox(width: 16),
+          const SizedBox(width: 10),
         ],
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.only(bottom: kBottomNavigationBarHeight),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: _buildHeader(context),
-              ),
-              _buildScheduleContainer(bookingProvider.bookings),
-              const SizedBox(height: 16),
-              _buildChatContainer(),
-            ],
+        child: RefreshIndicator(
+          onRefresh: () async {
+            _fetchBookings();
+          },
+          child: SingleChildScrollView(
+            padding: EdgeInsets.only(bottom: kBottomNavigationBarHeight),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: _buildHeader(context),
+                ),
+                _buildScheduleContainer(bookingProvider.bookings),
+                const SizedBox(height: 16),
+                _buildChatContainer(),
+              ],
+            ),
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => context.read<UserProvider>().logout(),
-        backgroundColor: Theme.of(context).primaryColor,
-        child: const Icon(Icons.logout),
-      ),
+    );
+  }
+
+  Widget _buildHeader(BuildContext context) {
+    var bookingProvider = context.watch<BookingProvider>();
+    final userProvider = Provider.of<UserProvider>(context);
+    final currentUser = userProvider.userModel;
+
+    int todaySessionsCount = bookingProvider.bookings
+        .where((session) {
+      DateTime sessionTime = session['startTime'];
+      return sessionTime.year == DateTime.now().year &&
+          sessionTime.month == DateTime.now().month &&
+          sessionTime.day == DateTime.now().day;
+    }).length;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Good morning, ${currentUser != null ? currentUser.firstName : 'User'}',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          'You have $todaySessionsCount sessions today',
+          style: TextStyle(fontSize: 16, color: Colors.grey),
+        ),
+      ],
     );
   }
 
@@ -337,32 +390,6 @@ class _TherapistHomePageState extends State<TherapistHomePage> with SingleTicker
     }
 
     return upcomingSessions;
-  }
-
-  Widget _buildHeader(BuildContext context) {
-    var bookingProvider = context.watch<BookingProvider>();
-    int todaySessionsCount = bookingProvider.bookings
-        .where((session) {
-      DateTime sessionTime = session['startTime'];
-      return sessionTime.year == DateTime.now().year &&
-          sessionTime.month == DateTime.now().month &&
-          sessionTime.day == DateTime.now().day;
-    }).length;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          'Good morning, Dr. Kim',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          'You have $todaySessionsCount sessions today',
-          style: TextStyle(fontSize: 16, color: Colors.grey),
-        ),
-      ],
-    );
   }
 
   Widget _buildSessionTile(BuildContext context, String name, String details, String imageUrl, String startTime, String endTime, bool isSelected) {

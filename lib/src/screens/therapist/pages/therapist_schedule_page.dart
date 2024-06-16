@@ -1,20 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:pocket_pal/src/providers/user_provider.dart';
+import 'package:pocket_pal/src/providers/therapist/availability_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
+
+import '../../../models/availability_model.dart';
 
 class TherapistSchedulePage extends StatefulWidget {
   const TherapistSchedulePage({super.key});
 
   @override
-  State<TherapistSchedulePage> createState() => _ManageSchedulePageState();
+  State<TherapistSchedulePage> createState() => TherapistSchedulePageState();
 }
 
-class _ManageSchedulePageState extends State<TherapistSchedulePage> {
+class TherapistSchedulePageState extends State<TherapistSchedulePage> {
   DateTime selectedDate = DateTime.now();
   TimeOfDay? selectedStartTime;
   TimeOfDay? selectedEndTime;
   final List<Map<String, dynamic>> addedTimeSlots = [];
+
+  @override
+  void initState() {
+    super.initState();
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final currentUser = userProvider.userModel;
+    final availabilityProvider = Provider.of<AvailabilityProvider>(context, listen: false);
+    availabilityProvider.getAvailabilities(currentUser!.id);
+  }
 
   Future<void> _selectTime(BuildContext context, {required bool isStartTime}) async {
     final TimeOfDay? picked = await showTimePicker(
@@ -32,7 +45,7 @@ class _ManageSchedulePageState extends State<TherapistSchedulePage> {
     }
   }
 
-  void _addTimeSlot() {
+  Future<void> _addAvailability() async {
     if (selectedStartTime != null && selectedEndTime != null) {
       setState(() {
         addedTimeSlots.add({
@@ -42,6 +55,12 @@ class _ManageSchedulePageState extends State<TherapistSchedulePage> {
         selectedStartTime = null;
         selectedEndTime = null;
       });
+
+      await _saveAvailability();
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Availability added successfully')),
+      );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please select both start and end times.')),
@@ -50,10 +69,9 @@ class _ManageSchedulePageState extends State<TherapistSchedulePage> {
   }
 
   Future<void> _saveAvailability() async {
-    String therapistId = "gSaqQfB0DQiCuxykc8LR"; // hardcoded value
-
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
-    CollectionReference availabilities = firestore.collection('availabilities');
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final currentUser = userProvider.userModel;
+    final availabilityProvider = Provider.of<AvailabilityProvider>(context, listen: false);
 
     for (var slot in addedTimeSlots) {
       DateTime startDate = DateTime(
@@ -71,28 +89,56 @@ class _ManageSchedulePageState extends State<TherapistSchedulePage> {
         slot['endTime'].minute,
       );
 
-      String availableOn = DateFormat('yyyy-MM-dd HH:mm').format(startDate);
-      String availableUntil = DateFormat('yyyy-MM-dd HH:mm').format(endDate);
-
-      await availabilities.add({
-        'therapistId': therapistId,
-        'availableOn': availableOn,
-        'availableUntil': availableUntil,
-        'isBooked': false,
-      });
+      await availabilityProvider.addAvailability(
+        therapistId: currentUser!.id,
+        availableOn: startDate,
+        availableUntil: endDate,
+      );
     }
 
     setState(() {
       addedTimeSlots.clear();
     });
+  }
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Availability added successfully')),
+  Future<void> _removeAvailability(String id) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final currentUser = userProvider.userModel;
+    final availabilityProvider = Provider.of<AvailabilityProvider>(context, listen: false);
+
+    bool? confirmDelete = await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Confirm Deletion'),
+          content: const Text('Are you sure you want to delete this availability?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: const Text('Delete'),
+            ),
+          ],
+        );
+      },
     );
+
+    if (confirmDelete == true) {
+      await availabilityProvider.removeAvailability(id, currentUser!.id);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Availability removed successfully')),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final availabilityProvider = Provider.of<AvailabilityProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Manage Schedule'),
@@ -111,7 +157,7 @@ class _ManageSchedulePageState extends State<TherapistSchedulePage> {
             const SizedBox(height: 20),
             Center(
               child: ElevatedButton(
-                onPressed: _addTimeSlot,
+                onPressed: _addAvailability,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,
                   padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
@@ -119,18 +165,13 @@ class _ManageSchedulePageState extends State<TherapistSchedulePage> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
-                child: const Text('Add Time Slot'),
+                child: const Text('Set Timeslot'),
               ),
             ),
             const SizedBox(height: 30),
-            _buildAddedTimeSlots(),
+            _buildAddedTimeSlots(availabilityProvider),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _saveAvailability,
-        backgroundColor: Colors.green,
-        child: const Icon(Icons.save),
       ),
     );
   }
@@ -157,6 +198,9 @@ class _ManageSchedulePageState extends State<TherapistSchedulePage> {
           color: Colors.green.withOpacity(0.6),
           shape: BoxShape.circle,
         ),
+      ),
+      headerStyle: HeaderStyle(
+        formatButtonVisible: false,
       ),
     );
   }
@@ -219,44 +263,90 @@ class _ManageSchedulePageState extends State<TherapistSchedulePage> {
     );
   }
 
-  Widget _buildAddedTimeSlots() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Your Opened Time Slots',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: Colors.green,
-          ),
-        ),
-        const SizedBox(height: 10),
-        Container(
-          height: 200, // Set a fixed height for the list container
-          child: ListView.builder(
-            itemCount: addedTimeSlots.length,
-            itemBuilder: (context, index) {
-              var slot = addedTimeSlots[index];
-              return Card(
-                margin: const EdgeInsets.symmetric(vertical: 8),
-                child: ListTile(
-                  title: Text('From: ${slot['startTime'].format(context)}'),
-                  subtitle: Text('Until: ${slot['endTime'].format(context)}'),
-                  trailing: IconButton(
-                    icon: Icon(Icons.delete, color: Colors.red),
-                    onPressed: () {
-                      setState(() {
-                        addedTimeSlots.removeAt(index);
-                      });
-                    },
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
-      ],
+  Widget _buildAddedTimeSlots(AvailabilityProvider availabilityProvider) {
+    return Consumer<AvailabilityProvider>(
+      builder: (context, availabilityProvider, child) {
+        final availabilities = availabilityProvider.availabilities;
+
+        // Group availabilities by week starting on Monday
+        Map<String, List<AvailabilityModel>> groupedAvailabilities = {};
+        for (var availability in availabilities) {
+          DateTime startOfWeek = availability.availableOn.subtract(Duration(days: availability.availableOn.weekday - 1));
+          String week = DateFormat('MMMM dd, yyyy').format(startOfWeek);
+          if (groupedAvailabilities.containsKey(week)) {
+            groupedAvailabilities[week]!.add(availability);
+          } else {
+            groupedAvailabilities[week] = [availability];
+          }
+        }
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Your Opened Time Slots',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.green,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Container(
+              height: 400, // Set a fixed height for the list container
+              child: ListView.builder(
+                itemCount: groupedAvailabilities.keys.length,
+                itemBuilder: (context, index) {
+                  String week = groupedAvailabilities.keys.elementAt(index);
+                  List<AvailabilityModel> availabilitiesForWeek = groupedAvailabilities[week]!;
+                  return ExpansionTile(
+                    title: Text(
+                      'Week: $week',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                    children: availabilitiesForWeek.map((availability) {
+                      return ListTile(
+                        title: Text(
+                          'Date: ${DateFormat('EEE, dd MMM').format(availability.availableOn)} - From: ${DateFormat('HH:mm').format(availability.availableOn)} Until: ${DateFormat('HH:mm').format(availability.availableUntil)}',
+                        ),
+                        trailing: availability.isBooked
+                            ? IconButton(
+                          icon: Icon(Icons.info, color: Colors.blue),
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: const Text('Info'),
+                                  content: const Text('This availability cannot be removed as it has been booked.'),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => Navigator.of(context).pop(),
+                                      child: const Text('OK'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                        )
+                            : IconButton(
+                          icon: Icon(Icons.delete, color: Colors.red),
+                          onPressed: () => _removeAvailability(availability.id),
+                        ),
+                      );
+                    }).toList(),
+                  );
+                },
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

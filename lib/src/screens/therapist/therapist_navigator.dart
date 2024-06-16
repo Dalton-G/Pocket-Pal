@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:pocket_pal/src/screens/therapist/pages/therapist_home_page.dart';
 import 'package:pocket_pal/src/screens/therapist/pages/therapist_schedule_page.dart';
-import 'package:pocket_pal/src/providers/therapist/navbar_selection_provider.dart';
 import 'package:pocket_pal/src/screens/therapist/pages/therapist_session_page.dart';
+import 'package:pocket_pal/src/providers/therapist/navbar_selection_provider.dart';
 import 'package:pocket_pal/src/widgets/navbar/g_navbar_enhanced.dart';
-import 'package:provider/provider.dart';
 
 class TherapistNavigator extends StatelessWidget {
   const TherapistNavigator({super.key});
@@ -14,15 +14,12 @@ class TherapistNavigator extends StatelessWidget {
   Widget build(BuildContext context) {
     final provider = Provider.of<NavbarSelectionProvider>(context);
 
-    final PageController pageController =
-    PageController(initialPage: provider.selectedIndex);
-
     return Scaffold(
       backgroundColor: Colors.white,
       body: Stack(
         children: [
           PageView(
-            controller: pageController,
+            controller: provider.pageController,
             onPageChanged: (index) {
               provider.setSelectedIndex(index);
             },
@@ -50,7 +47,7 @@ class TherapistNavigator extends StatelessWidget {
                   ),
                   onPressed: () {
                     provider.setSelectedIndex(0);
-                    pageController.jumpToPage(0);
+                    provider.pageController.jumpToPage(0);
                   },
                 ),
                 GButton(
@@ -65,7 +62,7 @@ class TherapistNavigator extends StatelessWidget {
                   ),
                   onPressed: () {
                     provider.setSelectedIndex(1);
-                    pageController.jumpToPage(1);
+                    provider.pageController.jumpToPage(1);
                   },
                 ),
                 GButton(
@@ -80,7 +77,7 @@ class TherapistNavigator extends StatelessWidget {
                   ),
                   onPressed: () {
                     provider.setSelectedIndex(2);
-                    pageController.jumpToPage(2);
+                    provider.pageController.jumpToPage(2);
                   },
                 ),
                 GButton(
@@ -95,7 +92,7 @@ class TherapistNavigator extends StatelessWidget {
                   ),
                   onPressed: () {
                     provider.setSelectedIndex(3);
-                    pageController.jumpToPage(3);
+                    provider.pageController.jumpToPage(3);
                   },
                 ),
                 GButton(
@@ -110,7 +107,7 @@ class TherapistNavigator extends StatelessWidget {
                   ),
                   onPressed: () {
                     provider.setSelectedIndex(4);
-                    pageController.jumpToPage(4);
+                    provider.pageController.jumpToPage(4);
                   },
                 ),
               ],

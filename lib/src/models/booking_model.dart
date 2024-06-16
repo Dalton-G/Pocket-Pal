@@ -23,14 +23,14 @@ class BookingModel {
 
   factory BookingModel.fromDocument(DocumentSnapshot doc) {
     return BookingModel(
-      id: doc['id'],
-      memberId: doc['member_id'],
-      therapistId: doc['therapist_id'],
-      availabilityId: doc['availability_id'],
-      review: doc['review'],
-      rating: doc['rating'],
-      createdAt: (doc['created_at'] as Timestamp).toDate(),
-      updatedAt: (doc['updated_at'] as Timestamp).toDate(),
+      id: doc.id,
+      memberId: doc.get('member_id'),
+      therapistId: doc.get('therapist_id'),
+      availabilityId: doc.get('availability_id'),
+      review: doc.get('review'),
+      rating: doc.get('rating'),
+      createdAt: (doc.get('created_at') as Timestamp).toDate(),
+      updatedAt: (doc.get('updated_at') as Timestamp).toDate(),
     );
   }
 }
